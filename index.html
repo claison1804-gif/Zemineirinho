@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827"><title>Bar Molhado Zemineirinho</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#111827;font-family:Arial,sans-serif;color:#111827}.phone{width:420px;max-width:100%;min-height:100vh;margin:auto;background:#f3f4f6}
+header{background:#111827;color:#fff;padding:18px 16px;position:sticky;top:0;z-index:5}header b{font-size:17px}header small{display:block;opacity:.7;margin-top:4px}
+nav{display:flex;background:#fff;overflow:auto;position:sticky;top:73px;z-index:4;border-bottom:1px solid #ddd}nav button{flex:1;min-width:95px;border:0;background:#fff;padding:13px 6px;font-weight:bold}nav button.on{background:#f59e0b}
+main{padding:12px 12px 70px}section{display:none}section.on{display:block}.card{background:#fff;border-radius:15px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px #0001}
+input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:5px 0 10px;font-size:15px}.btn{border:0;border-radius:10px;padding:12px;font-weight:bold;cursor:pointer}.primary{background:#111827;color:#fff}.accent{background:#f59e0b}.green{background:#16a34a;color:#fff}.red{background:#dc2626;color:#fff}.light{background:#e5e7eb}.btn:disabled{opacity:.55;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.prod{background:#fff;border:1px solid #ddd;border-radius:12px;padding:11px;text-align:left;cursor:pointer}.prod b{display:block;font-size:14px}.prod span{display:block;margin-top:7px;font-weight:bold}.muted{color:#6b7280;font-size:12px}
+.chips{display:flex;gap:6px;overflow:auto;margin-bottom:8px}.chip{white-space:nowrap;border:0;border-radius:20px;padding:10px 13px;background:#e5e7eb;cursor:pointer;flex:0 0 auto}.chip.on{background:#111827;color:#fff}
+.item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #eee}.qty{white-space:nowrap}.qty button{border:0;width:28px;height:28px;border-radius:7px;font-weight:bold}.total{font-size:23px;font-weight:900}.empty{text-align:center;color:#777;padding:25px}
+.badge{background:#dcfce7;color:#166534;padding:5px 8px;border-radius:20px;font-size:12px;font-weight:bold}.order{border:1px solid #eee;border-radius:12px;padding:12px;margin-top:9px}
+.modal{position:fixed;inset:0;background:#0009;display:none;align-items:end;justify-content:center;z-index:20}.modal.show{display:flex}.sheet{background:#fff;width:420px;max-width:100%;border-radius:20px 20px 0 0;padding:18px;max-height:90vh;overflow:auto}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px}.kpi{background:#fff;padding:14px;border-radius:13px}.kpi b{font-size:20px;display:block;margin-top:4px}
+.adminRow{display:grid;grid-template-columns:1fr 110px 90px;gap:7px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.adminRow input{margin:0}.status{font-size:12px;padding:5px 8px;border-radius:15px;font-weight:bold}.status.on{background:#dcfce7;color:#166534}.status.off{background:#fee2e2;color:#991b1b}</style>
+#loginScreen{position:fixed;inset:0;background:#111827;display:flex;align-items:center;justify-content:center;padding:18px;z-index:1000}.loginBox{width:420px;max-width:100%;background:#fff;border-radius:20px;padding:22px;box-shadow:0 15px 50px #0006}.loginBox h1{margin:0;font-size:22px}.loginBox .sub{color:#6b7280;margin:6px 0 18px}.loginBox label{display:block;font-weight:bold;margin-top:10px}.loginBox input{margin:6px 0 2px}.loginError{min-height:20px;color:#b91c1c;font-size:13px;margin:8px 0}.userbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}.userbar small{display:block}.logout{border:0;border-radius:9px;padding:8px 10px;background:#374151;color:#fff;font-weight:bold}.roleAdmin{color:#fde68a}.hidden{display:none!important}
+</head>
+<body>
+<div id="loginScreen"><div class="loginBox">
+<h1>🍺 Bar Molhado Zemineirinho</h1><div class="sub">Acesso restrito • entre com seu usuário</div>
+<label>E-mail</label><input id="loginEmail" type="email" autocomplete="username" placeholder="seu@email.com">
+<label>Senha</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')login()">
+<div id="loginError" class="loginError"></div>
+<button class="btn accent" style="width:100%" onclick="login()">ENTRAR</button>
+</div></div>
+<div class="phone" id="appShell" style="display:none">
+<header><b>🍺 Bar Molhado Zemineirinho</b><small>Avangarden • Comandas</small><div class="userbar"><small id="userInfo">—</small><button class="logout" onclick="logout()">SAIR</button></div></header>
+<nav><button class="on" onclick="tab('nova',this)">Nova</button><button onclick="tab('abertas',this)">Abertas</button><button onclick="tab('historico',this)">Histórico</button><button id="resumoNav" onclick="tab('resumo',this)">Resumo</button><button id="produtosNav" class="hidden" onclick="tab('produtos',this)">Produtos</button></nav>
+<main>
+<section id="nova" class="on">
+<div class="card"><b id="formTitle">ABRIR COMANDA</b><label>Nome do cliente</label><input id="nome" placeholder="Ex.: João"><label>Garçom</label><select id="garcom"><option value="">Selecione o garçom</option><option>Lima</option><option>Carla</option><option>Garçom Extra</option></select></div>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>PRODUTOS</b><input id="busca" oninput="renderProducts()" placeholder="🔎 Buscar" style="width:160px;margin:-6px 0 5px"></div><div id="chips" class="chips"></div><div id="prod" class="grid"></div></div>
+<div class="card"><div style="display:flex;justify-content:space-between"><b>COMANDA</b><span id="count" class="badge">0 itens</span></div><div id="cart"></div><div style="display:flex;justify-content:space-between;margin-top:12px"><span class="total">Total</span><span id="total" class="total">R$ 0,00</span></div>
+<div style="display:flex;gap:8px;margin-top:12px"><button class="btn light" style="flex:1" onclick="newOrder()">Limpar</button><button class="btn accent" style="flex:2" onclick="saveOpen()">SALVAR COMANDA</button></div></div>
+</section>
+<section id="abertas"><div class="card"><div style="display:flex;justify-content:space-between"><b>COMANDAS ABERTAS</b><button class="btn primary" onclick="newOrder();tab('nova',document.querySelector('nav button'))">+ Nova</button></div><div id="open"></div></div></section>
+<section id="historico"><div class="card"><b>HISTÓRICO DE VENDAS</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="hq" oninput="historyView()" placeholder="🔎 Buscar cliente"><input id="hd" type="date" onchange="historyView()" title="Filtrar por data"></div><button class="secondary" onclick="clearHistoryFilters()" style="margin-top:8px;width:100%">Limpar filtros</button><div id="hist"></div></div></section>
+<section id="resumo"><div class="card" style="margin-bottom:12px"><b>RESUMO POR DATA</b><div style="display:flex;gap:8px;margin-top:8px"><input id="sd" type="date" onchange="summary()" style="flex:1"><button class="btn light" onclick="clearSummaryDate()">Limpar</button></div></div><div class="kpis"><div class="kpi"><span class="muted">Faturamento</span><b id="sales">R$ 0,00</b></div><div class="kpi"><span class="muted">Comandas</span><b id="orders">0</b></div><div class="kpi"><span class="muted">Ticket médio</span><b id="avg">R$ 0,00</b></div><div class="kpi"><span class="muted">Itens</span><b id="items">0</b></div></div><div class="card" style="margin-top:12px"><b>PAGAMENTOS</b><div id="payments"></div></div></section>
+
+<section id="produtos">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <b>ADMINISTRAÇÃO DE PRODUTOS</b>
+      <button class="btn light" onclick="loadProducts(true)">↻ Atualizar</button>
+    </div>
+    <input id="prodBuscaAdmin" oninput="renderAdminProducts()" placeholder="🔎 Buscar produto">
+    <div class="muted" style="margin:3px 0 10px">Altere o preço e ative/desative produtos. As mudanças ficam salvas no banco online.</div>
+    
+<div class="card" style="margin-bottom:12px">
+  <h3 style="margin:0 0 10px">Cadastrar novo produto</h3>
+  <div class="grid2">
+    <label>Nome do produto
+      <input id="newProductName" type="text" placeholder="Ex.: Heineken 600ml">
+    </label>
+    <label>Categoria
+      <select id="newProductCategory">
+        <option>CERVEJAS</option>
+        <option>ENERGÉTICOS E ISOTÔNICOS</option>
+        <option>SUCOS</option>
+        <option>ÁGUAS E OUTRAS BEBIDAS</option>
+        <option>REFRIGERANTES</option>
+        <option>DRINKS ESPECIAIS</option>
+        <option>PORÇÕES</option>
+        <option>OUTROS</option>
+      </select>
+    </label>
+    <label>Preço (R$)
+      <input id="newProductPrice" type="number" min="0" step="0.01" placeholder="0,00">
+    </label>
+    <label>Status
+      <select id="newProductActive">
+        <option value="true">Ativo</option>
+        <option value="false">Inativo</option>
+      </select>
+    </label>
+  </div>
+  <button class="primary" onclick="createProduct()">CADASTRAR PRODUTO</button>
+  <div id="productMessage" class="muted" style="margin-top:8px"></div>
+</div>
+<div id="adminProducts"></div>
+
+  </div>
+</section>
+</main>
+<div id="modal" class="modal"><div class="sheet"><h2>Fechar comanda</h2><div id="ms"></div><label>Forma de pagamento</label><select id="pay" onchange="cash()"><option>Pix</option><option>Dinheiro</option><option>Débito</option><option>Crédito</option></select><div id="cash" style="display:none"><label>Valor recebido</label><input id="rec" type="number" step="0.01" oninput="troco()"><p>Troco: <b id="troco">R$ 0,00</b></p></div><button class="btn green" style="width:100%;margin-top:8px" onclick="finish()">CONFIRMAR PAGAMENTO</button><button class="btn light" style="width:100%;margin-top:8px" onclick="modal(false)">CANCELAR</button></div></div>
+</div>
+<script>
+const SUPABASE_URL='https://ompgjqlmbjipauiigokt.supabase.co';
+const SUPABASE_KEY='sb_publishable_qyWtm4533I6YSDV2LmhjbQ_7hKGKeDc';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentUser=null,currentProfile=null,realtimeStarted=false;
+
+const FALLBACK_P=[{"name":"Heineken","price":6.99,"category":"CERVEJAS"},{"name":"Original","price":5.99,"category":"CERVEJAS"},{"name":"Brahama","price":5.99,"category":"CERVEJAS"},{"name":"Michelob Ultra","price":9.9,"category":"CERVEJAS"},{"name":"Amstel Ultra","price":5.99,"category":"CERVEJAS"},{"name":"Energético Extra Power","price":10,"category":"ENERGÉTICOS E ISOTÔNICOS"},{"name":"Energético Red Bull","price":12.9,"category":"ENERGÉTICOS E ISOTÔNICOS"},{"name":"Gatorade","price":9.99,"category":"ENERGÉTICOS E ISOTÔNICOS"},{"name":"Suco Del Valle Uva","price":6.99,"category":"SUCOS"},{"name":"Suco Del Valle Pessego","price":6.99,"category":"SUCOS"},{"name":"Suco Del Valle Maracuja","price":6.99,"category":"SUCOS"},{"name":"Água Tônica","price":4.99,"category":"ÁGUAS E OUTRAS BEBIDAS"},{"name":"Água com Gás","price":4.99,"category":"ÁGUAS E OUTRAS BEBIDAS"},{"name":"Água sem Gás","price":3.99,"category":"ÁGUAS E OUTRAS BEBIDAS"},{"name":"Coca Cola Normal","price":5.99,"category":"REFRIGERANTES"},{"name":"Coca Cola Zero","price":5.99,"category":"REFRIGERANTES"},{"name":"Guaraná Antártica","price":5.99,"category":"REFRIGERANTES"},{"name":"Guaraná Antártica Zero","price":5.99,"category":"REFRIGERANTES"},{"name":"Fanta Laranja","price":5.99,"category":"REFRIGERANTES"},{"name":"Sprite / Soda Limao","price":5.99,"category":"REFRIGERANTES"},{"name":"Limoneto","price":6.99,"category":"REFRIGERANTES"},{"name":"Caipirinha Cachaça (Fruta da Estação)","price":18.9,"category":"DRINKS ESPECIAIS"},{"name":"Caipiroska Vodka  (Fruta da Estação)","price":21.9,"category":"DRINKS ESPECIAIS"},{"name":"Hamburgue Artesanal","price":32.9,"category":"PORÇÕES"},{"name":"Bruscheta Classica","price":20.9,"category":"PORÇÕES"},{"name":"Queijo Coalho","price":20.9,"category":"PORÇÕES"},{"name":"Batata Frita","price":35.9,"category":"PORÇÕES"},{"name":"Casadinho (Batata Frita e Calabresa )","price":64.9,"category":"PORÇÕES"},{"name":"Isca de Tilapia","price":79.9,"category":"PORÇÕES"},{"name":"File Mignon ao Molho Gorgonzola","price":95,"category":"PORÇÕES"},{"name":"Picanha na Chapa com Mandioca e Manteiga Garrafa","price":89.9,"category":"PORÇÕES"},{"name":"Porção Arroz Branco","price":16.9,"category":"PORÇÕES"}];
+
+let P=[...FALLBACK_P], db=JSON.parse(localStorage.getItem('zemineirinho_v2')||'{"open":[],"hist":[]}'), cart=[], cat='TODOS', editing=null;
+
+const R=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+
+function setLoginError(msg){document.getElementById('loginError').textContent=msg||''}
+
+async function login(){
+  const email=(document.getElementById('loginEmail').value||'').trim();
+  const password=document.getElementById('loginPassword').value||'';
+  if(!email||!password){setLoginError('Informe e-mail e senha.');return;}
+  setLoginError('Entrando...');
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  if(error){console.error(error);setLoginError('E-mail ou senha inválidos.');return;}
+  await activateSession(data.user);
+}
+
+async function activateSession(user){
+  if(!user){return;}
+  const {data:profile,error}=await sb.from('profiles').select('id,full_name,role,active').eq('id',user.id).maybeSingle();
+  if(error){console.error(error);setLoginError('Não foi possível carregar seu perfil.');await sb.auth.signOut();return;}
+  if(!profile){setLoginError('Usuário sem perfil no Zemineirinho. Cadastre o perfil no Supabase.');await sb.auth.signOut();return;}
+  if(!profile.active){setLoginError('Usuário desativado. Procure o administrador.');await sb.auth.signOut();return;}
+  currentUser=user;currentProfile=profile;
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appShell').style.display='block';
+  document.getElementById('userInfo').innerHTML=`${profile.full_name} • <span class="${profile.role==='admin'?'roleAdmin':''}">${profile.role==='admin'?'ADMINISTRADOR':'GARÇOM'}</span>`;
+  const pnav=document.getElementById('produtosNav');
+  pnav.classList.toggle('hidden',profile.role!=='admin');
+  const rnav=document.getElementById('resumoNav');
+  rnav.classList.toggle('hidden',profile.role!=='admin');
+  document.getElementById('resumo').classList.toggle('hidden',profile.role!=='admin');
+  const gar=document.getElementById('garcom');
+  if(profile.role==='garcom'){
+    if(![...gar.options].some(o=>o.value===profile.full_name)){const o=document.createElement('option');o.value=profile.full_name;o.textContent=profile.full_name;gar.appendChild(o);}
+    gar.value=profile.full_name;gar.disabled=true;
+  }else{gar.disabled=false;gar.value='';}
+  setLoginError('');
+  renderProducts();renderCart();if(profile.role==='admin')summary();
+  await Promise.all([loadData(),loadProducts()]);
+  if(!realtimeStarted){subscribeRealtime();realtimeStarted=true;}
+}
+
+async function logout(){
+  await sb.auth.signOut();
+  currentUser=null;currentProfile=null;
+  document.getElementById('appShell').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginPassword').value='';
+  setLoginError('');
+}
+
+async function bootAuth(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session?.user) await activateSession(session.user);
+  sb.auth.onAuthStateChange(async (_event,session)=>{
+    if(session?.user && !currentUser) await activateSession(session.user);
+    if(!session && currentUser){
+      currentUser=null;currentProfile=null;
+      document.getElementById('appShell').style.display='none';
+      document.getElementById('loginScreen').style.display='flex';
+      document.getElementById('loginPassword').value='';
+      setLoginError('Sessão encerrada.');
+    }
+  });
+}
+
+function save(){localStorage.setItem('zemineirinho_v2',JSON.stringify(db))}
+
+function tab(id,b){
+  if(!currentUser)return;
+  if(id==='produtos' && currentProfile?.role!=='admin'){alert('Acesso restrito ao administrador.');return;}
+  if(id==='resumo' && currentProfile?.role!=='admin'){alert('O Resumo é exclusivo do administrador.');return;}
+  document.querySelectorAll('section').forEach(x=>x.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
+  if(b)b.classList.add('on');
+  if(id==='nova')newOrder();
+  if(id==='abertas')openView();
+  if(id==='historico')historyView();
+  if(id==='resumo')summary();
+  if(id==='produtos')renderAdminProducts();
+}
+
+function newOrder(){editing=null;cart=[];cat='TODOS';document.getElementById('nome').value='';document.getElementById('garcom').value=currentProfile?.role==='garcom'?currentProfile.full_name:'';document.getElementById('formTitle').textContent='ABRIR COMANDA';renderCart()}
+
+function chips(){
+  const el=document.getElementById('chips');
+  if(!el)return;
+  const c=['TODOS',...new Set(P.map(x=>x.category).filter(Boolean))];
+  el.innerHTML=c.map(x=>`<button type="button" class="chip ${x===cat?'on':''}" data-category="${encodeURIComponent(x)}">${x}</button>`).join('');
+  el.querySelectorAll('.chip').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      cat=decodeURIComponent(btn.dataset.category);
+      renderProducts();
+    });
+  });
+}
+
+function renderProducts(){
+  chips();
+  let q=(document.getElementById('busca').value||'').toLowerCase();
+  let a=P.filter(x=>(cat==='TODOS'||x.category===cat)&&x.name.toLowerCase().includes(q));
+  document.getElementById('prod').innerHTML=a.map(x=>`<button class="prod" onclick='add(${JSON.stringify(x)})'><b>${x.name}</b><span>${R(x.price)}</span><small class="muted">${x.category}</small></button>`).join('')||'<div class="empty">Nenhum produto.</div>'
+}
+
+function add(p){let x=cart.find(i=>i.name===p.name);x?x.qty++:cart.push({...p,qty:1});renderCart()}
+function renderCart(){document.getElementById('cart').innerHTML=cart.length?cart.map((x,i)=>`<div class="item"><div><b>${x.qty}x ${x.name}</b><div class="muted">${R(x.price)} cada</div></div><div class="qty"><button onclick="chg(${i},-1)">−</button> ${x.qty} <button onclick="chg(${i},1)">+</button></div><b>${R(x.price*x.qty)}</b></div>`).join(''):'<div class="empty">Adicione produtos acima.</div>';let t=total();document.getElementById('total').textContent=R(t);document.getElementById('count').textContent=cart.reduce((s,x)=>s+x.qty,0)+' itens'}
+function chg(i,d){cart[i].qty+=d;if(cart[i].qty<1)cart.splice(i,1);renderCart()}
+function total(){return cart.reduce((s,x)=>s+x.price*x.qty,0)}
+
+async function saveOpen(){
+  let name=document.getElementById('nome').value.trim();
+  if(!name||!cart.length)return alert('Informe o nome e adicione produtos.');
+  let existing=editing?db.open.find(x=>String(x.id)===String(editing)):null;
+  let waiter=currentProfile?.role==='garcom'?currentProfile.full_name:document.getElementById('garcom').value;
+  if(!waiter)return alert('Selecione o garçom.');
+  let payload={customer_name:name,waiter,items:cart.map(x=>({...x})),total:total(),updated_at:new Date().toISOString()};
+  let result;
+  if(existing){
+    result=await sb.from('open_orders').update(payload).eq('id',existing.id);
+  }else{
+    result=await sb.from('open_orders').insert(payload);
+  }
+  if(result.error)return alert('Erro ao salvar comanda: '+result.error.message);
+  await loadData();
+  alert('Comanda salva e ficou em ABERTAS.');
+  newOrder(); tab('abertas',document.querySelectorAll('nav button')[1]);
+}
+
+function openView(){
+  const e=document.getElementById('open');
+  if(!e)return;
+
+  e.innerHTML=db.open.length
+    ? db.open.map(o=>`
+      <div class="order">
+        <div style="display:flex;justify-content:space-between;gap:8px">
+          <b>${o.name}</b><b>${R(o.total)}</b>
+        </div>
+        <div class="muted">${o.waiter||'Garçom não informado'} • ${new Date(o.date).toLocaleString('pt-BR')}</div>
+        <div style="margin:10px 0">
+          ${o.items.map(i=>`
+            <div class="item" style="margin:5px 0">
+              <div><b>${i.qty}x ${i.name}</b><div class="muted">${R(i.price*i.qty)}</div></div>
+            </div>`).join('')}
+        </div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button type="button" class="btn accent btnAddItems" data-id="${o.id}">ADICIONAR ITENS</button>
+          <button type="button" class="btn green btnCloseOrder" data-id="${o.id}">FECHAR</button>
+          <button type="button" class="btn red btnExcluirComanda" data-id="${o.id}">EXCLUIR COMANDA</button>
+        </div>
+      </div>`).join('')
+    : '<div class="empty">Nenhuma comanda aberta.</div>';
+}
+
+// Handler dedicado para EXCLUIR COMANDA: não depende de onclick inline.
+document.getElementById('open').addEventListener('click', function(ev){
+  const excluir=ev.target.closest('.btnExcluirComanda');
+  if(!excluir)return;
+  ev.preventDefault();
+  ev.stopImmediatePropagation();
+  excluirComandaDireto(excluir.dataset.id, excluir);
+});
+
+async function excluirComandaDireto(id,btn){
+  const o=db.open.find(x=>String(x.id)===String(id));
+  if(!o)return alert('Comanda não encontrada.');
+
+  if(!window.confirm('Deseja realmente EXCLUIR a comanda de '+(o.name||'cliente')+'?\n\nEsta ação não poderá ser desfeita.'))return;
+
+  btn.disabled=true;
+  btn.textContent='EXCLUINDO...';
+
+  try{
+    const resp=await sb.from('open_orders').delete().eq('id',id);
+    if(resp.error)throw resp.error;
+
+    db.open=db.open.filter(x=>String(x.id)!==String(id));
+    save();
+    openView();
+
+    const check=await sb.from('open_orders').select('id').eq('id',id).maybeSingle();
+    if(check.data){
+      alert('O banco não confirmou a exclusão. Verifique as políticas RLS do Supabase.');
+      await loadData();
+      return;
+    }
+    alert('Comanda excluída com sucesso.');
+  }catch(err){
+    console.error(err);
+    alert('Erro ao excluir a comanda: '+(err?.message||err));
+    btn.disabled=false;
+    btn.textContent='EXCLUIR COMANDA';
+  }
+}
+
+document.getElementById('open').addEventListener('click', async function(ev){
+  const btn=ev.target.closest('button[data-id]');
+  if(!btn)return;
+
+  ev.preventDefault();
+  ev.stopPropagation();
+
+  const id=btn.dataset.id;
+  const o=db.open.find(x=>String(x.id)===String(id));
+  if(!o)return alert('Comanda não encontrada.');
+
+  if(btn.classList.contains('btnAddItems')){
+    addItems(id);
+    return;
+  }
+
+  if(btn.classList.contains('btnCloseOrder')){
+    closeOpen(id);
+    return;
+  }
+
+  if(btn.classList.contains('btnExcluirComanda')){
+    const nomeCliente=o.name||o.customer_name||'esta comanda';
+    const confirmar=window.confirm('Deseja realmente EXCLUIR a comanda de '+nomeCliente+'?\n\nEsta ação não poderá ser desfeita.');
+    if(!confirmar)return;
+
+    btn.disabled=true;
+    btn.textContent='EXCLUINDO...';
+
+    try{
+      // O ID da comanda vem diretamente do registro do Supabase.
+      const resp=await sb.from('open_orders').delete().eq('id',id).select('id');
+
+      if(resp.error){
+        console.error('Erro Supabase ao excluir:',resp.error);
+        alert('Não foi possível excluir a comanda.\n\n'+resp.error.message);
+        btn.disabled=false;
+        btn.textContent='EXCLUIR COMANDA';
+        return;
+      }
+
+      // Confirma que o registro realmente não existe mais no banco.
+      const check=await sb.from('open_orders').select('id').eq('id',id).maybeSingle();
+      if(check.error){
+        console.error('Erro ao confirmar exclusão:',check.error);
+        alert('A exclusão foi enviada, mas não foi possível confirmar no banco.');
+      }else if(check.data){
+        alert('O banco não confirmou a exclusão. Verifique as permissões RLS do Supabase.');
+        btn.disabled=false;
+        btn.textContent='EXCLUIR COMANDA';
+        return;
+      }
+
+      db.open=db.open.filter(x=>String(x.id)!==String(id));
+      save();
+      openView();
+      alert('Comanda excluída com sucesso.');
+    }catch(err){
+      console.error(err);
+      alert('Erro ao excluir a comanda: '+(err?.message||err));
+      btn.disabled=false;
+      btn.textContent='EXCLUIR COMANDA';
+    }
+  }
+});
+
+function addItems(id){
+  const o=db.open.find(x=>String(x.id)===String(id));
+  if(!o)return alert('Comanda não encontrada.');
+
+  editing=o.id;
+  document.getElementById('nome').value=o.name||'';
+  document.getElementById('garcom').value=o.waiter||'';
+  cart=(o.items||[]).map(x=>({...x}));
+  document.getElementById('formTitle').textContent='ADICIONAR ITENS • '+o.name;
+  renderCart();
+  showNova();
+}
+
+function showNova(){
+  document.querySelectorAll('section').forEach(x=>x.classList.remove('on'));
+  document.getElementById('nova').classList.add('on');
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('nav button')[0].classList.add('on');
+}
+
+function closeOpen(id){
+  const o=db.open.find(x=>String(x.id)===String(id));
+  if(!o)return alert('Comanda não encontrada.');
+
+  editing=o.id;
+  cart=(o.items||[]).map(x=>({...x}));
+  document.getElementById('nome').value=o.name||'';
+  document.getElementById('garcom').value=o.waiter||'';
+  document.getElementById('ms').innerHTML=`<p><b>Cliente:</b> ${o.name}</p><p><b>Total:</b> ${R(o.total)}</p>`;
+  document.getElementById('pay').value='Pix';
+  document.getElementById('rec').value='';
+  document.getElementById('troco').textContent=R(0);
+  cash();
+  modal(true);
+}
+
+function modal(v){document.getElementById('modal').classList.toggle('show',v)}
+function cash(){document.getElementById('cash').style.display=document.getElementById('pay').value==='Dinheiro'?'block':'none'}
+function troco(){document.getElementById('troco').textContent=R(Math.max(0,(+document.getElementById('rec').value||0)-total()))}
+
+async function finish(){
+  let o=db.open.find(x=>String(x.id)===String(editing)),pay=document.getElementById('pay').value;
+  if(pay==='Dinheiro'&&(+document.getElementById('rec').value||0)<total())return alert('Valor recebido insuficiente.');
+  let payload={customer_name:document.getElementById('nome').value,waiter:document.getElementById('garcom').value,items:cart.map(x=>({...x})),total:total(),payment_method:pay};
+  let r=await sb.from('sales_history').insert(payload);
+  if(r.error)return alert('Erro ao fechar comanda: '+r.error.message);
+  if(o){let d=await sb.from('open_orders').delete().eq('id',o.id);if(d.error)return alert('Venda salva, mas houve erro ao remover a comanda aberta: '+d.error.message);}
+  await loadData();modal(false);newOrder();alert('Comanda fechada com sucesso!');tab('abertas',document.querySelectorAll('nav button')[1]);
+}
+
+function historyView(){let q=(document.getElementById('hq').value||'').toLowerCase(),d=document.getElementById('hd').value,a=db.hist.filter(x=>x.name.toLowerCase().includes(q)&&(!d||x.date.slice(0,10)===d));document.getElementById('hist').innerHTML=a.length?a.map(x=>`<div class="item"><div><b>${x.name}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')} • ${x.pay}</div></div><b>${R(x.total)}</b></div>`).join(''):'<div class="empty">Nenhuma venda.</div>'}
+function clearHistoryFilters(){document.getElementById('hq').value='';document.getElementById('hd').value='';historyView()}
+function summary(){let d=document.getElementById('sd')?.value||'',h=db.hist.filter(x=>!d||x.date.slice(0,10)===d),s=h.reduce((a,x)=>a+x.total,0),n=h.length,it=h.reduce((a,x)=>a+x.items.reduce((b,i)=>b+i.qty,0),0);document.getElementById('sales').textContent=R(s);document.getElementById('orders').textContent=n;document.getElementById('avg').textContent=R(n?s/n:0);document.getElementById('items').textContent=it;let p={};h.forEach(x=>p[x.pay]=(p[x.pay]||0)+x.total);document.getElementById('payments').innerHTML=Object.entries(p).map(([k,v])=>`<div class="item"><span>${k}</span><b>${R(v)}</b></div>`).join('')||'<div class="empty">Nenhuma venda no período.</div>'}
+function clearSummaryDate(){document.getElementById('sd').value='';summary()}
+
+async function loadProducts(silent=false){
+  const {data,error}=await sb.from('products').select('id,name,category,price,active').eq('active',true).order('category').order('name');
+  if(error){if(!silent)console.warn(error);return;}
+  P=(data||[]).map(x=>({id:x.id,name:x.name,category:x.category,price:Number(x.price)}));
+  if(cat!=='TODOS' && !P.some(x=>x.category===cat))cat='TODOS';
+  renderProducts();renderAdminProducts();
+}
+
+function renderAdminProducts(){
+  const el=document.getElementById('adminProducts'); if(!el)return;
+  let q=(document.getElementById('prodBuscaAdmin')?.value||'').toLowerCase();
+  sb.from('products').select('id,name,category,price,active').order('category').order('name').then(({data,error})=>{
+    if(error){el.innerHTML='<div class="empty">Não foi possível carregar os produtos.</div>';return;}
+    const a=(data||[]).filter(x=>x.name.toLowerCase().includes(q));
+    el.innerHTML=a.map(x=>`<div class="adminRow"><div><b>${x.name}</b><div class="muted">${x.category}</div></div><input id="price_${x.id}" type="number" step="0.01" min="0" value="${Number(x.price).toFixed(2)}"><button class="btn ${x.active?'green':'light'}" onclick="toggleProduct('${x.id}',${!x.active})">${x.active?'ATIVO':'INATIVO'}</button><button class="btn accent" style="grid-column:2/4" onclick="saveProduct('${x.id}')">SALVAR PREÇO</button><button class="btn red" style="grid-column:2/4" onclick="deleteProduct('${x.id}')">EXCLUIR PRODUTO</button></div>`).join('')||'<div class="empty">Nenhum produto encontrado.</div>';
+  });
+}
+
+async function saveProduct(id){
+  const input=document.getElementById('price_'+id),price=Number(input?.value);
+  if(!Number.isFinite(price)||price<0)return alert('Informe um preço válido.');
+  const {error}=await sb.from('products').update({price,updated_at:new Date().toISOString()}).eq('id',id);
+  if(error)return alert('Erro ao salvar preço: '+error.message);
+  await loadProducts(true);renderAdminProducts();alert('Preço atualizado com sucesso.');
+}
+
+async function toggleProduct(id,active){
+  const {error}=await sb.from('products').update({active,updated_at:new Date().toISOString()}).eq('id',id);
+  if(error)return alert('Erro ao alterar produto: '+error.message);
+  await loadProducts(true);renderAdminProducts();
+}
+
+async function deleteProduct(id){
+  const {data,error}=await sb.from('products').select('id,name').eq('id',id).maybeSingle();
+  if(error)return alert('Erro ao localizar produto: '+error.message);
+  if(!data)return alert('Produto não encontrado.');
+  if(!window.confirm('Deseja realmente EXCLUIR o produto "'+data.name+'"?\n\nEsta ação não poderá ser desfeita.'))return;
+
+  const resp=await sb.from('products').delete().eq('id',id);
+  if(resp.error){
+    alert('Erro ao excluir produto: '+resp.error.message);
+    return;
+  }
+
+  await loadProducts(true);
+  renderAdminProducts();
+  alert('Produto excluído com sucesso.');
+}
+
+window.deleteProduct=deleteProduct;
+
+async function loadData(){
+  const [o,h]=await Promise.all([
+    sb.from('open_orders').select('*').order('opened_at',{ascending:false}),
+    sb.from('sales_history').select('*').order('paid_at',{ascending:false})
+  ]);
+  if(o.error||h.error){console.warn(o.error||h.error);return;}
+  db.open=(o.data||[]).map(x=>({id:x.id,name:x.customer_name,waiter:x.waiter,items:x.items||[],total:Number(x.total),date:x.opened_at}));
+  db.hist=(h.data||[]).map(x=>({id:x.id,name:x.customer_name,waiter:x.waiter,items:x.items||[],total:Number(x.total),pay:x.payment_method,date:x.paid_at}));
+  save();openView();historyView();summary();
+}
+
+function subscribeRealtime(){
+  sb.channel('zemineirinho-realtime')
+    .on('postgres_changes',{event:'*',schema:'public',table:'open_orders'},()=>loadData())
+    .on('postgres_changes',{event:'*',schema:'public',table:'sales_history'},()=>loadData())
+    .on('postgres_changes',{event:'*',schema:'public',table:'products'},()=>loadProducts(true))
+    .subscribe();
+}
+
+(async function(){
+  await bootAuth();
+})();
+
+async function createProduct(){
+  const nameEl=document.getElementById('newProductName');
+  const catEl=document.getElementById('newProductCategory');
+  const priceEl=document.getElementById('newProductPrice');
+  const activeEl=document.getElementById('newProductActive');
+  const msg=document.getElementById('productMessage');
+
+  const name=(nameEl.value||'').trim();
+  const category=(catEl.value||'OUTROS').trim();
+  const price=Number(priceEl.value);
+  const active=activeEl.value==='true';
+
+  if(!name){
+    msg.textContent='Informe o nome do produto.';
+    return;
+  }
+  if(!Number.isFinite(price) || price<0){
+    msg.textContent='Informe um preço válido.';
+    return;
+  }
+
+  msg.textContent='Cadastrando...';
+  const {data,error}=await sb
+    .from('products')
+    .insert([{name,category,price:Number(price.toFixed(2)),active}])
+    .select()
+    .single();
+
+  if(error){
+    if(error.code==='23505'){
+      msg.textContent='Já existe um produto com esse nome.';
+    }else if(error.code==='42501'){
+      msg.textContent='Sem permissão para cadastrar. Verifique as políticas RLS do Supabase.';
+    }else{
+      msg.textContent='Erro ao cadastrar: '+(error.message||'erro desconhecido');
+    }
+    return;
+  }
+
+  nameEl.value='';
+  priceEl.value='';
+  activeEl.value='true';
+  msg.textContent='Produto cadastrado com sucesso.';
+  await loadData();
+  renderAdminProducts();
+  if(typeof renderProducts==='function') renderProducts();
+}
+
+</script></body></html>
