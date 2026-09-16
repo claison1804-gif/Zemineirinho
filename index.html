@@ -1,5 +1,11 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="pt-BR"><head>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#111827">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Zemineirinho"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#111827"><title>Bar Molhado Zemineirinho</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#111827;font-family:Arial,sans-serif;color:#111827}.phone{width:420px;max-width:100%;min-height:100vh;margin:auto;background:#f3f4f6}
@@ -13,20 +19,26 @@ input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;ma
 .badge{background:#dcfce7;color:#166534;padding:5px 8px;border-radius:20px;font-size:12px;font-weight:bold}.order{border:1px solid #eee;border-radius:12px;padding:12px;margin-top:9px}
 .modal{position:fixed;inset:0;background:#0009;display:none;align-items:end;justify-content:center;z-index:20}.modal.show{display:flex}.sheet{background:#fff;width:420px;max-width:100%;border-radius:20px 20px 0 0;padding:18px;max-height:90vh;overflow:auto}
 .kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px}.kpi{background:#fff;padding:14px;border-radius:13px}.kpi b{font-size:20px;display:block;margin-top:4px}
-.adminRow{display:grid;grid-template-columns:1fr 110px 90px;gap:7px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.adminRow input{margin:0}.status{font-size:12px;padding:5px 8px;border-radius:15px;font-weight:bold}.status.on{background:#dcfce7;color:#166534}.status.off{background:#fee2e2;color:#991b1b}</style>
-#loginScreen{position:fixed;inset:0;background:#111827;display:flex;align-items:center;justify-content:center;padding:18px;z-index:1000}.loginBox{width:420px;max-width:100%;background:#fff;border-radius:20px;padding:22px;box-shadow:0 15px 50px #0006}.loginBox h1{margin:0;font-size:22px}.loginBox .sub{color:#6b7280;margin:6px 0 18px}.loginBox label{display:block;font-weight:bold;margin-top:10px}.loginBox input{margin:6px 0 2px}.loginError{min-height:20px;color:#b91c1c;font-size:13px;margin:8px 0}.userbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}.userbar small{display:block}.logout{border:0;border-radius:9px;padding:8px 10px;background:#374151;color:#fff;font-weight:bold}.roleAdmin{color:#fde68a}.hidden{display:none!important}
-</head>
+.adminRow{display:grid;grid-template-columns:1fr 110px 90px;gap:7px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.adminRow input{margin:0}.status{font-size:12px;padding:5px 8px;border-radius:15px;font-weight:bold}.status.on{background:#dcfce7;color:#166534}.status.off{background:#fee2e2;color:#991b1b}
+.authScreen{position:fixed;inset:0;background:#111827;display:flex;align-items:center;justify-content:center;padding:18px;z-index:100}.authCard{width:420px;max-width:100%;background:#fff;border-radius:18px;padding:22px;box-shadow:0 15px 50px #0006}.authLogo{font-size:38px;text-align:center}.authCard h1{text-align:center;margin:8px 0 2px}.authCard p{text-align:center;color:#6b7280;margin:4px 0 18px}.authError{color:#b91c1c;background:#fee2e2;border-radius:10px;padding:10px;font-size:13px;margin:8px 0;display:none}.userBar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}.userInfo{font-size:12px;opacity:.85}.logoutBtn{border:1px solid #ffffff55;background:#ffffff12;color:#fff;border-radius:9px;padding:8px 10px;font-weight:bold;cursor:pointer}.phone.appHidden{display:none}
+</style></head>
 <body>
-<div id="loginScreen"><div class="loginBox">
-<h1>🍺 Bar Molhado Zemineirinho</h1><div class="sub">Acesso restrito • entre com seu usuário</div>
-<label>E-mail</label><input id="loginEmail" type="email" autocomplete="username" placeholder="seu@email.com">
-<label>Senha</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')login()">
-<div id="loginError" class="loginError"></div>
-<button class="btn accent" style="width:100%" onclick="login()">ENTRAR</button>
-</div></div>
-<div class="phone" id="appShell" style="display:none">
-<header><b>🍺 Bar Molhado Zemineirinho</b><small>Avangarden • Comandas</small><div class="userbar"><small id="userInfo">—</small><button class="logout" onclick="logout()">SAIR</button></div></header>
-<nav><button class="on" onclick="tab('nova',this)">Nova</button><button onclick="tab('abertas',this)">Abertas</button><button onclick="tab('historico',this)">Histórico</button><button id="resumoNav" onclick="tab('resumo',this)">Resumo</button><button id="produtosNav" class="hidden" onclick="tab('produtos',this)">Produtos</button></nav>
+<div id="loginScreen" class="authScreen">
+  <form id="loginForm" class="authCard">
+    <div class="authLogo">🍺</div>
+    <h1>Zemineirinho</h1>
+    <p>Bar Molhado • Avangarden</p>
+    <label>E-mail</label>
+    <input id="loginEmail" type="email" autocomplete="username" placeholder="seu@email.com" required>
+    <label>Senha</label>
+    <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+    <div id="loginError" class="authError"></div>
+    <button id="loginButton" class="btn primary" type="submit" style="width:100%;margin-top:5px">ENTRAR</button>
+  </form>
+</div>
+<div class="phone appHidden" id="app">
+<header><b>🍺 Bar Molhado Zemineirinho</b><small>Avangarden • Comandas</small><div class="userBar"><span id="loggedUser" class="userInfo"></span><button class="logoutBtn" onclick="logout()">SAIR</button></div></header>
+<nav><button class="on" data-view="nova" onclick="tab('nova',this)">Nova</button><button data-view="abertas" onclick="tab('abertas',this)">Abertas</button><button data-view="historico" onclick="tab('historico',this)">Histórico</button><button data-view="resumo" data-admin-only="1" onclick="tab('resumo',this)">Resumo</button><button data-view="produtos" data-admin-only="1" onclick="tab('produtos',this)">Produtos</button></nav>
 <main>
 <section id="nova" class="on">
 <div class="card"><b id="formTitle">ABRIR COMANDA</b><label>Nome do cliente</label><input id="nome" placeholder="Ex.: João"><label>Garçom</label><select id="garcom"><option value="">Selecione o garçom</option><option>Lima</option><option>Carla</option><option>Garçom Extra</option></select></div>
@@ -89,7 +101,91 @@ input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;ma
 const SUPABASE_URL='https://ompgjqlmbjipauiigokt.supabase.co';
 const SUPABASE_KEY='sb_publishable_qyWtm4533I6YSDV2LmhjbQ_7hKGKeDc';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let currentUser=null,currentProfile=null,realtimeStarted=false;
+let currentUser=null;
+let currentProfile=null;
+let currentRole='garcom';
+let appBooted=false;
+
+function showLogin(message=''){
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('app').classList.add('appHidden');
+  const e=document.getElementById('loginError');
+  e.textContent=message||''; e.style.display=message?'block':'none';
+}
+
+function showApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').classList.remove('appHidden');
+}
+
+function applyRoleUI(){
+  document.querySelectorAll('[data-admin-only="1"]').forEach(el=>el.style.display=currentRole==='admin'?'':'none');
+  const name=currentProfile?.full_name || currentUser?.email || '';
+  document.getElementById('loggedUser').textContent=(name?name+' • ':'')+(currentRole==='admin'?'Administrador':'Garçom');
+  if(currentRole!=='admin' && document.getElementById('resumo').classList.contains('on')){
+    tab('nova',document.querySelector('nav button[data-view="nova"]'));
+  }
+}
+
+async function loadProfile(user){
+  const {data,error}=await sb.from('profiles').select('id,full_name,role,active').eq('id',user.id).maybeSingle();
+  if(error) throw error;
+  if(!data) throw new Error('Perfil do usuário não encontrado. Crie o perfil em public.profiles.');
+  if(data.active===false) throw new Error('Este usuário está inativo. Procure o administrador.');
+  currentProfile=data; currentRole=data.role==='admin'?'admin':'garcom';
+}
+
+async function enterApp(session){
+  if(!session?.user){showLogin();return;}
+  try{
+    await loadProfile(session.user);
+    currentUser=session.user;
+    applyRoleUI(); showApp();
+    if(!appBooted){
+      appBooted=true;
+      renderProducts();renderCart();
+      await Promise.all([loadData(),loadProducts()]);
+      subscribeRealtime();
+    }else{
+      await loadData(); await loadProducts(true);
+    }
+  }catch(err){
+    console.error(err);
+    await sb.auth.signOut();
+    currentUser=null;currentProfile=null;
+    showLogin(err?.message||'Não foi possível entrar.');
+  }
+}
+
+async function logout(){
+  await sb.auth.signOut();
+  currentUser=null; currentProfile=null; currentRole='garcom'; appBooted=false;
+  showLogin();
+}
+
+document.getElementById('loginForm').addEventListener('submit',async ev=>{
+  ev.preventDefault();
+  const btn=document.getElementById('loginButton');
+  const email=document.getElementById('loginEmail').value.trim();
+  const password=document.getElementById('loginPassword').value;
+  const err=document.getElementById('loginError');
+  err.style.display='none'; btn.disabled=true; btn.textContent='ENTRANDO...';
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  btn.disabled=false; btn.textContent='ENTRAR';
+  if(error){err.textContent='E-mail ou senha inválidos.';err.style.display='block';return;}
+  await enterApp(data.session);
+});
+
+async function initAuth(){
+  showLogin();
+  const {data}=await sb.auth.getSession();
+  if(data.session) await enterApp(data.session);
+  sb.auth.onAuthStateChange(async (event,session)=>{
+    if(event==='SIGNED_OUT'){showLogin();return;}
+    if(event==='SIGNED_IN' && session && !currentUser) await enterApp(session);
+  });
+}
+
 
 const FALLBACK_P=[{"name":"Heineken","price":6.99,"category":"CERVEJAS"},{"name":"Original","price":5.99,"category":"CERVEJAS"},{"name":"Brahama","price":5.99,"category":"CERVEJAS"},{"name":"Michelob Ultra","price":9.9,"category":"CERVEJAS"},{"name":"Amstel Ultra","price":5.99,"category":"CERVEJAS"},{"name":"Energético Extra Power","price":10,"category":"ENERGÉTICOS E ISOTÔNICOS"},{"name":"Energético Red Bull","price":12.9,"category":"ENERGÉTICOS E ISOTÔNICOS"},{"name":"Gatorade","price":9.99,"category":"ENERGÉTICOS E ISOTÔNICOS"},{"name":"Suco Del Valle Uva","price":6.99,"category":"SUCOS"},{"name":"Suco Del Valle Pessego","price":6.99,"category":"SUCOS"},{"name":"Suco Del Valle Maracuja","price":6.99,"category":"SUCOS"},{"name":"Água Tônica","price":4.99,"category":"ÁGUAS E OUTRAS BEBIDAS"},{"name":"Água com Gás","price":4.99,"category":"ÁGUAS E OUTRAS BEBIDAS"},{"name":"Água sem Gás","price":3.99,"category":"ÁGUAS E OUTRAS BEBIDAS"},{"name":"Coca Cola Normal","price":5.99,"category":"REFRIGERANTES"},{"name":"Coca Cola Zero","price":5.99,"category":"REFRIGERANTES"},{"name":"Guaraná Antártica","price":5.99,"category":"REFRIGERANTES"},{"name":"Guaraná Antártica Zero","price":5.99,"category":"REFRIGERANTES"},{"name":"Fanta Laranja","price":5.99,"category":"REFRIGERANTES"},{"name":"Sprite / Soda Limao","price":5.99,"category":"REFRIGERANTES"},{"name":"Limoneto","price":6.99,"category":"REFRIGERANTES"},{"name":"Caipirinha Cachaça (Fruta da Estação)","price":18.9,"category":"DRINKS ESPECIAIS"},{"name":"Caipiroska Vodka  (Fruta da Estação)","price":21.9,"category":"DRINKS ESPECIAIS"},{"name":"Hamburgue Artesanal","price":32.9,"category":"PORÇÕES"},{"name":"Bruscheta Classica","price":20.9,"category":"PORÇÕES"},{"name":"Queijo Coalho","price":20.9,"category":"PORÇÕES"},{"name":"Batata Frita","price":35.9,"category":"PORÇÕES"},{"name":"Casadinho (Batata Frita e Calabresa )","price":64.9,"category":"PORÇÕES"},{"name":"Isca de Tilapia","price":79.9,"category":"PORÇÕES"},{"name":"File Mignon ao Molho Gorgonzola","price":95,"category":"PORÇÕES"},{"name":"Picanha na Chapa com Mandioca e Manteiga Garrafa","price":89.9,"category":"PORÇÕES"},{"name":"Porção Arroz Branco","price":16.9,"category":"PORÇÕES"}];
 
@@ -97,74 +193,10 @@ let P=[...FALLBACK_P], db=JSON.parse(localStorage.getItem('zemineirinho_v2')||'{
 
 const R=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 
-function setLoginError(msg){document.getElementById('loginError').textContent=msg||''}
-
-async function login(){
-  const email=(document.getElementById('loginEmail').value||'').trim();
-  const password=document.getElementById('loginPassword').value||'';
-  if(!email||!password){setLoginError('Informe e-mail e senha.');return;}
-  setLoginError('Entrando...');
-  const {data,error}=await sb.auth.signInWithPassword({email,password});
-  if(error){console.error(error);setLoginError('E-mail ou senha inválidos.');return;}
-  await activateSession(data.user);
-}
-
-async function activateSession(user){
-  if(!user){return;}
-  const {data:profile,error}=await sb.from('profiles').select('id,full_name,role,active').eq('id',user.id).maybeSingle();
-  if(error){console.error(error);setLoginError('Não foi possível carregar seu perfil.');await sb.auth.signOut();return;}
-  if(!profile){setLoginError('Usuário sem perfil no Zemineirinho. Cadastre o perfil no Supabase.');await sb.auth.signOut();return;}
-  if(!profile.active){setLoginError('Usuário desativado. Procure o administrador.');await sb.auth.signOut();return;}
-  currentUser=user;currentProfile=profile;
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('appShell').style.display='block';
-  document.getElementById('userInfo').innerHTML=`${profile.full_name} • <span class="${profile.role==='admin'?'roleAdmin':''}">${profile.role==='admin'?'ADMINISTRADOR':'GARÇOM'}</span>`;
-  const pnav=document.getElementById('produtosNav');
-  pnav.classList.toggle('hidden',profile.role!=='admin');
-  const rnav=document.getElementById('resumoNav');
-  rnav.classList.toggle('hidden',profile.role!=='admin');
-  document.getElementById('resumo').classList.toggle('hidden',profile.role!=='admin');
-  const gar=document.getElementById('garcom');
-  if(profile.role==='garcom'){
-    if(![...gar.options].some(o=>o.value===profile.full_name)){const o=document.createElement('option');o.value=profile.full_name;o.textContent=profile.full_name;gar.appendChild(o);}
-    gar.value=profile.full_name;gar.disabled=true;
-  }else{gar.disabled=false;gar.value='';}
-  setLoginError('');
-  renderProducts();renderCart();if(profile.role==='admin')summary();
-  await Promise.all([loadData(),loadProducts()]);
-  if(!realtimeStarted){subscribeRealtime();realtimeStarted=true;}
-}
-
-async function logout(){
-  await sb.auth.signOut();
-  currentUser=null;currentProfile=null;
-  document.getElementById('appShell').style.display='none';
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('loginPassword').value='';
-  setLoginError('');
-}
-
-async function bootAuth(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(session?.user) await activateSession(session.user);
-  sb.auth.onAuthStateChange(async (_event,session)=>{
-    if(session?.user && !currentUser) await activateSession(session.user);
-    if(!session && currentUser){
-      currentUser=null;currentProfile=null;
-      document.getElementById('appShell').style.display='none';
-      document.getElementById('loginScreen').style.display='flex';
-      document.getElementById('loginPassword').value='';
-      setLoginError('Sessão encerrada.');
-    }
-  });
-}
-
 function save(){localStorage.setItem('zemineirinho_v2',JSON.stringify(db))}
 
 function tab(id,b){
-  if(!currentUser)return;
-  if(id==='produtos' && currentProfile?.role!=='admin'){alert('Acesso restrito ao administrador.');return;}
-  if(id==='resumo' && currentProfile?.role!=='admin'){alert('O Resumo é exclusivo do administrador.');return;}
+  if((id==='resumo'||id==='produtos')&&currentRole!=='admin'){alert('Acesso permitido somente ao administrador.');return;}
   document.querySelectorAll('section').forEach(x=>x.classList.remove('on'));
   document.getElementById(id).classList.add('on');
   document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
@@ -176,7 +208,7 @@ function tab(id,b){
   if(id==='produtos')renderAdminProducts();
 }
 
-function newOrder(){editing=null;cart=[];cat='TODOS';document.getElementById('nome').value='';document.getElementById('garcom').value=currentProfile?.role==='garcom'?currentProfile.full_name:'';document.getElementById('formTitle').textContent='ABRIR COMANDA';renderCart()}
+function newOrder(){editing=null;cart=[];cat='TODOS';document.getElementById('nome').value='';document.getElementById('garcom').value='';document.getElementById('formTitle').textContent='ABRIR COMANDA';renderCart()}
 
 function chips(){
   const el=document.getElementById('chips');
@@ -207,9 +239,7 @@ async function saveOpen(){
   let name=document.getElementById('nome').value.trim();
   if(!name||!cart.length)return alert('Informe o nome e adicione produtos.');
   let existing=editing?db.open.find(x=>String(x.id)===String(editing)):null;
-  let waiter=currentProfile?.role==='garcom'?currentProfile.full_name:document.getElementById('garcom').value;
-  if(!waiter)return alert('Selecione o garçom.');
-  let payload={customer_name:name,waiter,items:cart.map(x=>({...x})),total:total(),updated_at:new Date().toISOString()};
+  let payload={customer_name:name,waiter:document.getElementById('garcom').value,items:cart.map(x=>({...x})),total:total(),updated_at:new Date().toISOString()};
   let result;
   if(existing){
     result=await sb.from('open_orders').update(payload).eq('id',existing.id);
@@ -418,7 +448,7 @@ async function loadProducts(silent=false){
   renderProducts();renderAdminProducts();
 }
 
-function renderAdminProducts(){
+function renderAdminProducts(){if(currentRole!=='admin')return;
   const el=document.getElementById('adminProducts'); if(!el)return;
   let q=(document.getElementById('prodBuscaAdmin')?.value||'').toLowerCase();
   sb.from('products').select('id,name,category,price,active').order('category').order('name').then(({data,error})=>{
@@ -428,7 +458,7 @@ function renderAdminProducts(){
   });
 }
 
-async function saveProduct(id){
+async function saveProduct(id){if(currentRole!=='admin')return alert('Acesso permitido somente ao administrador.');
   const input=document.getElementById('price_'+id),price=Number(input?.value);
   if(!Number.isFinite(price)||price<0)return alert('Informe um preço válido.');
   const {error}=await sb.from('products').update({price,updated_at:new Date().toISOString()}).eq('id',id);
@@ -436,13 +466,13 @@ async function saveProduct(id){
   await loadProducts(true);renderAdminProducts();alert('Preço atualizado com sucesso.');
 }
 
-async function toggleProduct(id,active){
+async function toggleProduct(id,active){if(currentRole!=='admin')return alert('Acesso permitido somente ao administrador.');
   const {error}=await sb.from('products').update({active,updated_at:new Date().toISOString()}).eq('id',id);
   if(error)return alert('Erro ao alterar produto: '+error.message);
   await loadProducts(true);renderAdminProducts();
 }
 
-async function deleteProduct(id){
+async function deleteProduct(id){if(currentRole!=='admin')return alert('Acesso permitido somente ao administrador.');
   const {data,error}=await sb.from('products').select('id,name').eq('id',id).maybeSingle();
   if(error)return alert('Erro ao localizar produto: '+error.message);
   if(!data)return alert('Produto não encontrado.');
@@ -480,11 +510,9 @@ function subscribeRealtime(){
     .subscribe();
 }
 
-(async function(){
-  await bootAuth();
-})();
+initAuth();
 
-async function createProduct(){
+async function createProduct(){if(currentRole!=='admin')return alert('Acesso permitido somente ao administrador.');
   const nameEl=document.getElementById('newProductName');
   const catEl=document.getElementById('newProductCategory');
   const priceEl=document.getElementById('newProductPrice');
@@ -532,4 +560,15 @@ async function createProduct(){
   if(typeof renderProducts==='function') renderProducts();
 }
 
-</script></body></html>
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err =>
+      console.warn('PWA: service worker não registrado', err)
+    );
+  });
+}
+</script>
+
+</body></html>
