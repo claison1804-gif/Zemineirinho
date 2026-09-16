@@ -10,3 +10,4 @@ Garçons: Lima, Carla e Garçom Extra.
 Administrador: usuário com role admin.
 
 O aplicativo usa o mesmo banco Supabase e exige HTTPS para instalação PWA.
+Atualização do Zemineirinho
