@@ -48,7 +48,7 @@ input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;ma
 </section>
 <section id="abertas"><div class="card"><div style="display:flex;justify-content:space-between"><b>COMANDAS ABERTAS</b><button class="btn primary" onclick="newOrder();tab('nova',document.querySelector('nav button'))">+ Nova</button></div><div id="open"></div></div></section>
 <section id="historico"><div class="card"><b>HISTÓRICO DE VENDAS</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="hq" oninput="historyView()" placeholder="🔎 Buscar cliente"><input id="hd" type="date" onchange="historyView()" title="Filtrar por data"></div><button class="secondary" onclick="clearHistoryFilters()" style="margin-top:8px;width:100%">Limpar filtros</button><div id="hist"></div></div></section>
-<section id="resumo"><div class="card" style="margin-bottom:12px"><b>RESUMO POR DATA</b><div style="display:flex;gap:8px;margin-top:8px"><input id="sd" type="date" onchange="summary()" style="flex:1"><button class="btn light" onclick="clearSummaryDate()">Limpar</button></div></div><div class="kpis"><div class="kpi"><span class="muted">Faturamento</span><b id="sales">R$ 0,00</b></div><div class="kpi"><span class="muted">Comandas</span><b id="orders">0</b></div><div class="kpi"><span class="muted">Ticket médio</span><b id="avg">R$ 0,00</b></div><div class="kpi"><span class="muted">Itens</span><b id="items">0</b></div></div><div class="card" style="margin-top:12px"><b>PAGAMENTOS</b><div id="payments"></div></div></section>
+<section id="resumo"><div class="card" style="margin-bottom:12px"><b>RESUMO POR DATA</b><div style="display:flex;gap:8px;margin-top:8px"><input id="sd" type="date" onchange="summary()" style="flex:1"><button class="btn light" onclick="clearSummaryDate()">Limpar</button></div></div><div class="kpis"><div class="kpi"><span class="muted">Faturamento</span><b id="sales">R$ 0,00</b></div><div class="kpi"><span class="muted">Comandas</span><b id="orders">0</b></div><div class="kpi"><span class="muted">Ticket médio</span><b id="avg">R$ 0,00</b></div><div class="kpi"><span class="muted">Itens</span><b id="items">0</b></div></div><div class="card" style="margin-top:12px"><b>PAGAMENTOS</b><div id="payments"></div></div><div class="card" style="margin-top:12px"><div style="display:flex;justify-content:space-between;align-items:center"><b>COMANDAS FECHADAS</b><span class="muted">Toque para ver o consumo</span></div><div id="summaryOrders"></div></div></section>
 
 <section id="produtos">
   <div class="card">
@@ -272,6 +272,7 @@ function openView(){
         <div style="display:flex;gap:7px;flex-wrap:wrap">
           <button type="button" class="btn accent btnAddItems" data-id="${o.id}">ADICIONAR ITENS</button>
           <button type="button" class="btn green btnCloseOrder" data-id="${o.id}">FECHAR</button>
+          <button type="button" class="btn" style="background:#25D366;color:#fff" data-wa-id="${o.id}">WHATSAPP</button>
           <button type="button" class="btn red btnExcluirComanda" data-id="${o.id}">EXCLUIR COMANDA</button>
         </div>
       </div>`).join('')
@@ -317,6 +318,41 @@ async function excluirComandaDireto(id,btn){
     btn.disabled=false;
     btn.textContent='EXCLUIR COMANDA';
   }
+}
+
+document.getElementById('open').addEventListener('click', function(ev){
+  const btn=ev.target.closest('button[data-wa-id]');
+  if(!btn)return;
+  ev.preventDefault();
+  ev.stopImmediatePropagation();
+  const o=db.open.find(x=>String(x.id)===String(btn.dataset.waId));
+  if(o) openWhatsApp(o);
+});
+
+function openWhatsApp(o){
+  document.getElementById('waOrderId').value=o.id;
+  document.getElementById('waPhone').value='';
+  document.getElementById('waCustomer').textContent=o.name||'Cliente';
+  document.getElementById('waModal').classList.add('show');
+  setTimeout(()=>document.getElementById('waPhone').focus(),100);
+}
+function closeWhatsApp(){document.getElementById('waModal').classList.remove('show')}
+function sendWhatsApp(){
+  const id=document.getElementById('waOrderId').value;
+  const o=db.open.find(x=>String(x.id)===String(id));
+  if(!o)return alert('Comanda não encontrada.');
+  let phone=(document.getElementById('waPhone').value||'').replace(/\D/g,'');
+  if(phone.startsWith('0'))phone=phone.replace(/^0+/,'');
+  if(phone.length===10||phone.length===11)phone='55'+phone;
+  if(phone.length<12)return alert('Informe um número de WhatsApp válido com DDD.');
+  let msg='🍺 *Bar Molhado Zemineirinho*\n*Resumo da comanda*\n\n';
+  msg+='Cliente: '+(o.name||'Cliente')+'\n';
+  msg+='Garçom: '+(o.waiter||'—')+'\n\n';
+  (o.items||[]).forEach(i=>{msg+=String(i.qty)+'x '+i.name+' — '+R(Number(i.price)*Number(i.qty))+'\n'});
+  msg+='\n*Total parcial: '+R(o.total)+'*\n';
+  msg+='\n_Comanda ainda aberta — o valor poderá ser alterado até o fechamento._';
+  window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg),'_blank');
+  closeWhatsApp();
 }
 
 document.getElementById('open').addEventListener('click', async function(ev){
@@ -435,9 +471,29 @@ async function finish(){
   await loadData();modal(false);newOrder();alert('Comanda fechada com sucesso!');tab('abertas',document.querySelectorAll('nav button')[1]);
 }
 
-function historyView(){let q=(document.getElementById('hq').value||'').toLowerCase(),d=document.getElementById('hd').value,a=db.hist.filter(x=>x.name.toLowerCase().includes(q)&&(!d||x.date.slice(0,10)===d));document.getElementById('hist').innerHTML=a.length?a.map(x=>`<div class="item"><div><b>${x.name}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')} • ${x.pay}</div></div><b>${R(x.total)}</b></div>`).join(''):'<div class="empty">Nenhuma venda.</div>'}
+function localDateKey(v){const z=new Date(v);if(isNaN(z))return '';return z.getFullYear()+'-'+String(z.getMonth()+1).padStart(2,'0')+'-'+String(z.getDate()).padStart(2,'0')}
+function historyView(){let q=(document.getElementById('hq').value||'').toLowerCase(),d=document.getElementById('hd').value,a=db.hist.filter(x=>x.name.toLowerCase().includes(q)&&(!d||localDateKey(x.date)===d));document.getElementById('hist').innerHTML=a.length?a.map(x=>`<button class="item" style="width:100%;border:0;background:#fff;text-align:left;cursor:pointer" onclick="historyDetailOpen('${x.id}')"><div><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')} • ${x.waiter||'—'} • ${x.pay||'—'}</div><div class="muted" style="margin-top:3px">Toque para ver o consumo</div></div><b>${R(x.total)}</b></button>`).join(''):'<div class="empty">Nenhuma venda.</div>'}
+function historyDetailOpen(id){let x=db.hist.find(v=>String(v.id)===String(id));if(!x)return;let rows=(x.items||[]).map(i=>`<div class="item"><div><b>${i.name}</b><div class="muted">${i.qty} x ${R(i.price)}</div></div><b>${R(Number(i.price)*Number(i.qty))}</b></div>`).join('')||'<div class="empty">Nenhum item registrado.</div>';document.getElementById('summaryDetail').innerHTML=`<div class="card" style="margin-top:12px"><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')}</div><div class="muted">Garçom: ${x.waiter||'—'} • Pagamento: ${x.pay||'—'}</div></div><div class="card">${rows}<div style="display:flex;justify-content:space-between;margin-top:12px"><span class="total">TOTAL</span><span class="total">${R(x.total)}</span></div></div>`;document.getElementById('summaryDetailModal').classList.add('show')}
 function clearHistoryFilters(){document.getElementById('hq').value='';document.getElementById('hd').value='';historyView()}
-function summary(){let d=document.getElementById('sd')?.value||'',h=db.hist.filter(x=>!d||x.date.slice(0,10)===d),s=h.reduce((a,x)=>a+x.total,0),n=h.length,it=h.reduce((a,x)=>a+x.items.reduce((b,i)=>b+i.qty,0),0);document.getElementById('sales').textContent=R(s);document.getElementById('orders').textContent=n;document.getElementById('avg').textContent=R(n?s/n:0);document.getElementById('items').textContent=it;let p={};h.forEach(x=>p[x.pay]=(p[x.pay]||0)+x.total);document.getElementById('payments').innerHTML=Object.entries(p).map(([k,v])=>`<div class="item"><span>${k}</span><b>${R(v)}</b></div>`).join('')||'<div class="empty">Nenhuma venda no período.</div>'}
+function summary(){let d=document.getElementById('sd')?.value||'',h=db.hist.filter(x=>!d||localDateKey(x.date)===d),s=h.reduce((a,x)=>a+x.total,0),n=h.length,it=h.reduce((a,x)=>a+x.items.reduce((b,i)=>b+i.qty,0),0);document.getElementById('sales').textContent=R(s);document.getElementById('orders').textContent=n;document.getElementById('avg').textContent=R(n?s/n:0);document.getElementById('items').textContent=it;let p={};h.forEach(x=>p[x.pay]=(p[x.pay]||0)+x.total);document.getElementById('payments').innerHTML=Object.entries(p).map(([k,v])=>`<div class="item"><span>${k}</span><b>${R(v)}</b></div>`).join('')||'<div class="empty">Nenhuma venda no período.</div>';document.getElementById('summaryOrders').innerHTML=h.length?h.map(x=>`<div class="item" style="width:100%;display:flex;gap:8px;align-items:center"><button type="button" style="flex:1;border:0;background:#fff;text-align:left;cursor:pointer;padding:0" onclick="summaryDetailOpen('${x.id}')"><div><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')} • ${x.waiter||'—'} • ${x.pay||'—'}</div></div></button><div style="text-align:right;min-width:110px"><b>${R(x.total)}</b><br><button type="button" class="btn red" style="margin-top:6px;padding:7px 9px;font-size:12px" onclick="event.stopPropagation();deleteClosedOrder('${x.id}')">EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhuma comanda fechada no período.</div>'}function summaryDetailOpen(id){let x=db.hist.find(v=>String(v.id)===String(id));if(!x)return;let rows=(x.items||[]).map(i=>`<div class="item"><div><b>${i.name}</b><div class="muted">${i.qty} x ${R(i.price)}</div></div><b>${R(Number(i.price)*Number(i.qty))}</b></div>`).join('')||'<div class="empty">Nenhum item registrado.</div>';document.getElementById('summaryDetail').innerHTML=`<div class="card" style="margin-top:12px"><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')}</div><div class="muted">Garçom: ${x.waiter||'—'} • Pagamento: ${x.pay||'—'}</div></div><div class="card">${rows}<div style="display:flex;justify-content:space-between;margin-top:12px"><span class="total">TOTAL</span><span class="total">${R(x.total)}</span></div></div>`;document.getElementById('summaryDetailModal').classList.add('show')}function summaryDetailClose(){document.getElementById('summaryDetailModal').classList.remove('show')}
+async function deleteClosedOrder(id){
+  const x=db.hist.find(v=>String(v.id)===String(id));
+  if(!x)return alert('Fechamento não encontrado.');
+  const label=x.name||'Cliente';
+  if(!window.confirm('Deseja realmente EXCLUIR o fechamento da comanda de '+label+'?\n\nEsta ação apagará este lançamento do banco de dados e não poderá ser desfeita.'))return;
+  try{
+    const resp=await sb.from('sales_history').delete().eq('id',id);
+    if(resp.error)throw resp.error;
+    db.hist=db.hist.filter(v=>String(v.id)!==String(id));
+    save();
+    summary();
+    historyView();
+    alert('Fechamento excluído com sucesso.');
+  }catch(err){
+    console.error(err);
+    alert('Erro ao excluir o fechamento: '+(err?.message||err));
+  }
+}
 function clearSummaryDate(){document.getElementById('sd').value='';summary()}
 
 async function loadProducts(silent=false){
@@ -571,4 +627,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+<div id="waModal" class="modal" onclick="if(event.target===this)closeWhatsApp()"><div class="sheet"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>ENVIAR COMANDA VIA WHATSAPP</b><button class="btn light" onclick="closeWhatsApp()">✕</button></div><p class="muted" style="margin:10px 0 4px">Cliente</p><div id="waCustomer" style="font-weight:bold;margin-bottom:10px"></div><input type="hidden" id="waOrderId"><label>WhatsApp do cliente</label><input id="waPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="Ex.: (64) 99999-9999"><div class="muted" style="margin:0 0 10px">Digite o número com DDD. O WhatsApp será aberto com a mensagem pronta.</div><button class="btn" style="width:100%;background:#25D366;color:#fff" onclick="sendWhatsApp()">ENVIAR PELO WHATSAPP</button><button class="btn light" style="width:100%;margin-top:8px" onclick="closeWhatsApp()">CANCELAR</button></div></div>
+<div id="summaryDetailModal" class="modal" onclick="if(event.target===this)summaryDetailClose()"><div class="sheet"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>DETALHAMENTO DA COMANDA</b><button class="btn light" onclick="summaryDetailClose()">✕</button></div><div id="summaryDetail"></div><button class="btn primary" style="width:100%;margin-top:12px" onclick="summaryDetailClose()">FECHAR DETALHAMENTO</button></div></div>
 </body></html>
