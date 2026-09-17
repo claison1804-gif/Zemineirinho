@@ -1,1 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192"><rect width="192" height="192" rx="38" fill="#111827"/><text x="96" y="122" text-anchor="middle" font-size="88">🍺</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="112" fill="#111827"/>
+<circle cx="256" cy="245" r="145" fill="#ffffff"/>
+<path d="M166 290h180v32c0 18-14 32-32 32H198c-18 0-32-14-32-32v-32z" fill="#111827"/>
+<path d="M190 250c15-38 42-59 66-59s51 21 66 59" fill="none" stroke="#111827" stroke-width="20" stroke-linecap="round"/>
+<path d="M256 125v52" stroke="#111827" stroke-width="20" stroke-linecap="round"/>
+<circle cx="210" cy="245" r="10" fill="#111827"/>
+<circle cx="302" cy="245" r="10" fill="#111827"/>
+<text x="256" y="410" text-anchor="middle" font-family="Arial,sans-serif" font-size="42" font-weight="700" fill="#fff">ZEMINEIRINHO</text>
+</svg>
