@@ -1,4 +1,4 @@
-const CACHE_NAME = 'zemineirinho-pwa-v6';
+const CACHE_NAME = 'zemineirinho-pwa-v7';
 const APP_SHELL = [
   './',
   './index.html',
