@@ -19,9 +19,92 @@ input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;ma
 .badge{background:#dcfce7;color:#166534;padding:5px 8px;border-radius:20px;font-size:12px;font-weight:bold}.order{border:1px solid #eee;border-radius:12px;padding:12px;margin-top:9px}
 .modal{position:fixed;inset:0;background:#0009;display:none;align-items:end;justify-content:center;z-index:20}.modal.show{display:flex}.sheet{background:#fff;width:420px;max-width:100%;border-radius:20px 20px 0 0;padding:18px;max-height:90vh;overflow:auto}
 .kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px}.kpi{background:#fff;padding:14px;border-radius:13px}.kpi b{font-size:20px;display:block;margin-top:4px}
-.adminRow{display:grid;grid-template-columns:1fr 110px 90px;gap:7px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.adminRow input{margin:0}.status{font-size:12px;padding:5px 8px;border-radius:15px;font-weight:bold}.status.on{background:#dcfce7;color:#166534}.status.off{background:#fee2e2;color:#991b1b}.employeeRow{display:grid;grid-template-columns:1.2fr 1.4fr 100px 110px auto auto;gap:7px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.employeeRow input,.employeeRow select{margin:0}.employeeRow button{white-space:nowrap}@media(max-width:700px){.employeeRow{grid-template-columns:1fr 1fr}.employeeRow .employeeWide{grid-column:1/3}}
+.adminRow{display:grid;grid-template-columns:1fr 110px 90px;gap:7px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.adminRow input{margin:0}.stockRow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;padding:12px 0 14px;border-bottom:1px solid #eee;width:100%;max-width:100%;min-width:0;overflow:hidden}.stockRow *{box-sizing:border-box;max-width:100%;min-width:0}.stockProduct{flex:0 0 100%;width:100%;padding-bottom:2px;min-width:0}.stockProduct b{display:block;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.2}.stockField{flex:1 1 calc(50% - 4px);width:calc(50% - 4px);display:flex;flex-direction:column;min-width:0;max-width:calc(50% - 4px);background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:8px;margin:0}.stockField span,.stockMobileLabel{display:block;font-size:11px;color:#6b7280;font-weight:700;margin-bottom:4px;line-height:1.1;white-space:normal}.stockField input{display:block;width:100%;max-width:100%;min-width:0;margin:0}.stockMetric{flex:1 1 calc(50% - 4px);width:calc(50% - 4px);background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px;min-width:0;max-width:calc(50% - 4px);text-align:left;font-weight:800}.stockMetric b{font-size:18px}.stockMetric.negative{color:#b91c1c}.stockMetric.zero{color:#92400e}.stockMetric.positive{color:#166534}.stockRow > button{flex:0 0 100%;width:100%;max-width:100%;white-space:nowrap}.stockPricePair{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:100%;min-width:0}.stockPricePair .stockField{width:100%;max-width:100%;min-width:0}.stockSaleInput{background:#eef2f7!important;color:#111827!important}.inventoryHeader{display:none}.inventoryListWrap{width:100%;max-width:100%;min-width:0;overflow:hidden}.status{font-size:12px;padding:5px 8px;border-radius:15px;font-weight:bold}.status.on{background:#dcfce7;color:#166534}.status.off{background:#fee2e2;color:#991b1b}.employeeRow{display:grid;grid-template-columns:1.2fr 1.4fr 100px 110px auto auto;gap:7px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.employeeRow input,.employeeRow select{margin:0}.employeeRow button{white-space:nowrap}.card,.inventoryListWrap,.stockRow{overflow-x:hidden} .stockField,.stockMetric{overflow:hidden} @media(max-width:700px){.employeeRow{grid-template-columns:1fr 1fr}.employeeRow .employeeWide{grid-column:1/3}}
 .authScreen{position:fixed;inset:0;background:#111827;display:flex;align-items:center;justify-content:center;padding:18px;z-index:100}.authCard{width:420px;max-width:100%;background:#fff;border-radius:18px;padding:22px;box-shadow:0 15px 50px #0006}.authLogo{font-size:38px;text-align:center}.authCard h1{text-align:center;margin:8px 0 2px}.authCard p{text-align:center;color:#6b7280;margin:4px 0 18px}.authError{color:#b91c1c;background:#fee2e2;border-radius:10px;padding:10px;font-size:13px;margin:8px 0;display:none}.userBar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}.userInfo{font-size:12px;opacity:.85}.logoutBtn{border:1px solid #ffffff55;background:#ffffff12;color:#fff;border-radius:9px;padding:8px 10px;font-weight:bold;cursor:pointer}.phone.appHidden{display:none}
-.employeeRowFixed{grid-template-columns:minmax(0,1fr) 95px 115px auto auto!important}.employeeInfo{min-width:0;overflow:hidden}.employeeNameText{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.employeeEmailText{font-size:13px;color:#6b7280;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.employeeRowFixed select,.employeeRowFixed button{min-width:0}@media(max-width:700px){.employeeRowFixed{grid-template-columns:1fr 1fr!important}.employeeRowFixed .employeeInfo{grid-column:1/3}.employeeRowFixed .btn{width:100%}}<style>.employeeSimpleRow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #eee}.employeeSimpleName{font-weight:700;font-size:16px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:700px){.employeeSimpleRow{grid-template-columns:1fr 1fr}.employeeSimpleName{grid-column:1/3}.employeeSimpleRow .btn{width:100%}}</style></style></head>
+.employeeRowFixed{grid-template-columns:minmax(0,1fr) 95px 115px auto auto!important}.employeeInfo{min-width:0;overflow:hidden}.employeeNameText{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.employeeEmailText{font-size:13px;color:#6b7280;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.employeeRowFixed select,.employeeRowFixed button{min-width:0}@media(max-width:700px){.employeeRowFixed{grid-template-columns:1fr 1fr!important}.employeeRowFixed .employeeInfo{grid-column:1/3}.employeeRowFixed .btn{width:100%}}<style>.employeeSimpleRow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #eee}.employeeSimpleName{font-weight:700;font-size:16px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:700px){.employeeSimpleRow{grid-template-columns:1fr 1fr}.employeeSimpleName{grid-column:1/3}.employeeSimpleRow .btn{width:100%}}</style></style>
+<style id="inventory-layout-final">
+/* Controle de Estoque - layout totalmente responsivo, sem rolagem horizontal */
+#inventoryList, .inventoryListWrap { width:100% !important; max-width:100% !important; overflow:visible !important; min-width:0 !important; }
+#inventoryList * { max-width:100%; }
+#inventoryList .inventoryHeader { display:none !important; }
+#inventoryList .stockRow {
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  margin:0 !important;
+  padding:14px 0 !important;
+  border-bottom:1px solid #e5e7eb !important;
+  box-sizing:border-box !important;
+}
+#inventoryList .stockProduct {
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 0 10px !important;
+  padding:0 !important;
+  grid-column:auto !important;
+}
+#inventoryList .stockProduct b {
+  display:block !important;
+  font-size:17px !important;
+  line-height:1.25 !important;
+  white-space:normal !important;
+  overflow-wrap:anywhere !important;
+}
+#inventoryList .stockField,
+#inventoryList .stockMetric {
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  margin:8px 0 0 !important;
+  padding:10px !important;
+  border:1px solid #e5e7eb !important;
+  border-radius:10px !important;
+  background:#f9fafb !important;
+  box-sizing:border-box !important;
+}
+#inventoryList .stockField span,
+#inventoryList .stockMobileLabel {
+  display:block !important;
+  font-size:11px !important;
+  color:#6b7280 !important;
+  font-weight:700 !important;
+  margin-bottom:5px !important;
+}
+#inventoryList .stockField input {
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+#inventoryList .stockMetric b {
+  display:block !important;
+  font-size:19px !important;
+  line-height:1.2 !important;
+}
+#inventoryList .stockRow > button {
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  margin:10px 0 0 !important;
+  grid-column:auto !important;
+  box-sizing:border-box !important;
+}
+/* Mantém os cards de estoque empilhados em qualquer largura para evitar overflow dentro do app */
+#inventoryList .stockRow{display:block !important;}
+#inventoryList .stockProduct,
+#inventoryList .stockField,
+#inventoryList .stockMetric,
+#inventoryList .stockRow > button{width:100% !important;max-width:100% !important;min-width:0 !important;margin-left:0 !important;margin-right:0 !important;}
+#inventoryList .stockPricePair{display:grid !important;grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;gap:8px !important;width:100% !important;max-width:100% !important;min-width:0 !important;}
+#inventoryList .stockPricePair .stockField{width:100% !important;max-width:100% !important;min-width:0 !important;}
+#inventoryList .stockSaleInput{background:#eef2f7 !important;}</style>
+
+</head>
 <body>
 <div id="loginScreen" class="authScreen">
   <form id="loginForm" class="authCard">
@@ -40,7 +123,7 @@ input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;ma
 </div>
 <div class="phone appHidden" id="app">
 <header><b>🍺 Bar Molhado Zemineirinho</b><small>Avangarden • Comandas</small><div class="userBar"><span id="loggedUser" class="userInfo"></span><button class="logoutBtn" onclick="logout()">SAIR</button></div></header>
-<nav><button class="on" data-view="nova" onclick="tab('nova',this)">Nova</button><button data-view="abertas" onclick="tab('abertas',this)">Abertas</button><button data-view="comandaFuncionarios" onclick="tab('comandaFuncionarios',this)">Comanda Funcionários</button><button data-view="historico" onclick="tab('historico',this)">Histórico</button><button data-view="resumo" data-admin-only="1" onclick="tab('resumo',this)">Resumo</button><button data-view="produtos" data-admin-only="1" onclick="tab('produtos',this)">Produtos</button><button data-view="funcionarios" data-admin-only="1" onclick="tab('funcionarios',this)">Funcionários</button></nav>
+<nav><button class="on" data-view="nova" onclick="tab('nova',this)">Nova</button><button data-view="abertas" onclick="tab('abertas',this)">Abertas</button><button data-view="comandaFuncionarios" onclick="tab('comandaFuncionarios',this)">Comanda Funcionários</button><button data-view="historico" onclick="tab('historico',this)">Histórico</button><button data-view="resumo" data-admin-only="1" onclick="tab('resumo',this)">Resumo</button><button data-view="produtos" data-admin-only="1" onclick="tab('produtos',this)">Produtos</button><button data-view="funcionarios" data-admin-only="1" onclick="tab('funcionarios',this)">Funcionários</button><button data-view="estoque" data-admin-only="1" onclick="tab('estoque',this)">Estoque</button></nav>
 <main>
 <section id="nova" class="on">
 <div class="card"><b id="formTitle">ABRIR COMANDA</b><label>Nome do cliente</label><input id="nome" placeholder="Ex.: João"><div class="muted" style="margin-top:4px">Atendente: <b id="currentWaiterDisplay">—</b></div></div>
@@ -90,7 +173,7 @@ input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;ma
 </section>
 <section id="abertas"><div class="card"><div style="display:flex;justify-content:space-between"><b>COMANDAS ABERTAS</b><button class="btn primary" onclick="newOrder();tab('nova',document.querySelector('nav button'))">+ Nova</button></div><div id="open"></div></div></section>
 <section id="historico"><div class="card"><b>HISTÓRICO DE VENDAS</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="hq" oninput="historyView()" placeholder="🔎 Buscar cliente"><input id="hd" type="date" onchange="historyView()" title="Filtrar por data"></div><button class="secondary" onclick="clearHistoryFilters()" style="margin-top:8px;width:100%">Limpar filtros</button><div id="hist"></div></div></section>
-<section id="resumo"><div class="card" style="margin-bottom:12px"><b>RESUMO POR DATA</b><div style="display:flex;gap:8px;margin-top:8px"><input id="sd" type="date" onchange="summary()" style="flex:1"><button class="btn light" onclick="clearSummaryDate()">Limpar</button></div></div><div class="kpis"><div class="kpi"><span class="muted">Faturamento</span><b id="sales">R$ 0,00</b></div><div class="kpi"><span class="muted">Comandas</span><b id="orders">0</b></div><div class="kpi"><span class="muted">Ticket médio</span><b id="avg">R$ 0,00</b></div><div class="kpi"><span class="muted">Itens</span><b id="items">0</b></div></div><div class="card" style="margin-top:12px"><b>PAGAMENTOS</b><div id="payments"></div></div><div class="card" style="margin-top:12px"><div style="display:flex;justify-content:space-between;align-items:center"><b>COMANDAS FECHADAS</b><span class="muted">Toque para ver o consumo</span></div><div id="summaryOrders"></div></div></section>
+<section id="resumo"><div class="card" style="margin-bottom:12px"><b>RESUMO POR PERÍODO</b><div class="grid2" style="margin-top:8px"><label>Data inicial<input id="sdStart" type="date" onchange="summary()"></label><label>Data final<input id="sdEnd" type="date" onchange="summary()"></label></div><button class="btn light" onclick="clearSummaryDate()" style="width:100%;margin-top:4px">LIMPAR PERÍODO</button></div><div class="kpis"><div class="kpi"><span class="muted">Faturamento</span><b id="sales">R$ 0,00</b></div><div class="kpi"><span class="muted">Comandas</span><b id="orders">0</b></div><div class="kpi"><span class="muted">Ticket médio</span><b id="avg">R$ 0,00</b></div><div class="kpi"><span class="muted">Itens</span><b id="items">0</b></div></div><div class="card" style="margin-top:12px"><b>PAGAMENTOS</b><div id="payments"></div></div><div class="card" style="margin-top:12px"><div style="display:flex;justify-content:space-between;align-items:center"><b>COMANDAS FECHADAS</b><span class="muted">Toque para ver o consumo</span></div><div id="summaryOrders"></div></div></section>
 
 <section id="produtos">
   <div class="card">
@@ -175,6 +258,21 @@ input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;ma
     <div id="employeesList" style="margin-top:8px"></div>
   </div>
 </section>
+<section id="estoque">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <b>CONTROLE DE ESTOQUE</b>
+      <button class="btn light" onclick="renderInventory()">↻ Atualizar</button>
+    </div>
+    <div class="muted" style="margin:3px 0 10px">Área exclusiva do administrador. O vendido é calculado automaticamente pelas comandas fechadas de clientes e funcionários.</div>
+    <input id="estoqueBusca" oninput="renderInventory()" placeholder="🔎 Buscar produto">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0;flex-wrap:wrap">
+      <span class="muted" id="estoqueStatus">Carregando estoque...</span>
+      <button class="btn accent" onclick="saveAllInventory()">SALVAR ESTOQUE</button>
+    </div>
+    <div id="inventoryList" class="inventoryListWrap" style="overflow-x:hidden;max-width:100%;width:100%;"></div>
+  </div>
+</section>
 </main>
 <div id="modal" class="modal"><div class="sheet"><h2>Fechar comanda</h2><div id="ms"></div><label>Forma de pagamento</label><select id="pay" onchange="cash()"><option>Pix</option><option>Dinheiro</option><option>Débito</option><option>Crédito</option></select><div id="cash" style="display:none"><label>Valor recebido</label><input id="rec" type="number" step="0.01" oninput="troco()"><p>Troco: <b id="troco">R$ 0,00</b></p></div><button class="btn green" style="width:100%;margin-top:8px" onclick="finish()">CONFIRMAR PAGAMENTO</button><button class="btn light" style="width:100%;margin-top:8px" onclick="modal(false)">CANCELAR</button></div></div>
 <div id="employeePaymentModal" class="modal" onclick="if(event.target===this)employeePaymentClose()"><div class="sheet">
@@ -201,6 +299,7 @@ let currentUser=null;
 let currentProfile=null;
 let currentRole='garcom';
 let appBooted=false;
+let inventoryProducts=[];
 
 function showLogin(message=''){
   document.getElementById('loginScreen').style.display='flex';
@@ -311,7 +410,7 @@ const R=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}
 function save(){localStorage.setItem('zemineirinho_v2',JSON.stringify(db))}
 
 async function tab(id,b){
-  if((id==='resumo'||id==='produtos'||id==='funcionarios')&&currentRole!=='admin'){
+  if((id==='resumo'||id==='produtos'||id==='funcionarios'||id==='estoque')&&currentRole!=='admin'){
     alert('Acesso permitido somente ao administrador.');
     return;
   }
@@ -325,6 +424,7 @@ async function tab(id,b){
   if(id==='resumo')summary();
   if(id==='produtos')renderAdminProducts();
   if(id==='funcionarios')await loadEmployees();
+  if(id==='estoque')await renderInventory();
   if(id==='comandaFuncionarios'){await loadEmployeeWorkers();renderEmployeeProducts();renderEmployeeCart();renderEmployeeOpenList();}
 }
 
@@ -654,10 +754,10 @@ async function finish(){
 }
 
 function localDateKey(v){const z=new Date(v);if(isNaN(z))return '';return z.getFullYear()+'-'+String(z.getMonth()+1).padStart(2,'0')+'-'+String(z.getDate()).padStart(2,'0')}
-function historyView(){let q=(document.getElementById('hq').value||'').toLowerCase(),d=document.getElementById('hd').value,a=db.hist.filter(x=>x.name.toLowerCase().includes(q)&&(!d||localDateKey(x.date)===d));document.getElementById('hist').innerHTML=a.length?a.map(x=>`<button class="item" style="width:100%;border:0;background:#fff;text-align:left;cursor:pointer" onclick="historyDetailOpen('${x.id}')"><div><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')} • ${x.waiter||'—'} • ${x.pay||'—'}</div><div class="muted" style="margin-top:3px">Toque para ver o consumo</div></div><b>${R(x.total)}</b></button>`).join(''):'<div class="empty">Nenhuma venda.</div>'}
+function historyView(){let q=(document.getElementById('hq').value||'').toLowerCase(),d=document.getElementById('hd').value;if(!d){d=localDateKey(new Date());document.getElementById('hd').value=d;}let a=db.hist.filter(x=>x.name.toLowerCase().includes(q)&&localDateKey(x.date)===d);document.getElementById('hist').innerHTML=a.length?a.map(x=>`<button class="item" style="width:100%;border:0;background:#fff;text-align:left;cursor:pointer" onclick="historyDetailOpen('${x.id}')"><div><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')} • ${x.waiter||'—'} • ${x.pay||'—'}</div><div class="muted" style="margin-top:3px">Toque para ver o consumo</div></div><b>${R(x.total)}</b></button>`).join(''):'<div class="empty">Nenhuma venda para esta data.</div>'}
 function historyDetailOpen(id){let x=db.hist.find(v=>String(v.id)===String(id));if(!x)return;let rows=(x.items||[]).map(i=>`<div class="item"><div><b>${i.name}</b><div class="muted">${i.qty} x ${R(i.price)}</div></div><b>${R(Number(i.price)*Number(i.qty))}</b></div>`).join('')||'<div class="empty">Nenhum item registrado.</div>';document.getElementById('summaryDetail').innerHTML=`<div class="card" style="margin-top:12px"><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')}</div><div class="muted">Garçom: ${x.waiter||'—'} • Pagamento: ${x.pay||'—'}</div></div><div class="card">${rows}<div style="display:flex;justify-content:space-between;margin-top:12px"><span class="total">TOTAL</span><span class="total">${R(x.total)}</span></div></div>`;document.getElementById('summaryDetailModal').classList.add('show')}
-function clearHistoryFilters(){document.getElementById('hq').value='';document.getElementById('hd').value='';historyView()}
-function summary(){let d=document.getElementById('sd')?.value||'',h=db.hist.filter(x=>!d||localDateKey(x.date)===d),s=h.reduce((a,x)=>a+x.total,0),n=h.length,it=h.reduce((a,x)=>a+x.items.reduce((b,i)=>b+i.qty,0),0);document.getElementById('sales').textContent=R(s);document.getElementById('orders').textContent=n;document.getElementById('avg').textContent=R(n?s/n:0);document.getElementById('items').textContent=it;let p={};h.forEach(x=>p[x.pay]=(p[x.pay]||0)+x.total);document.getElementById('payments').innerHTML=Object.entries(p).map(([k,v])=>`<div class="item"><span>${k}</span><b>${R(v)}</b></div>`).join('')||'<div class="empty">Nenhuma venda no período.</div>';document.getElementById('summaryOrders').innerHTML=h.length?h.map(x=>`<div class="item" style="width:100%;display:flex;gap:8px;align-items:center"><button type="button" style="flex:1;border:0;background:#fff;text-align:left;cursor:pointer;padding:0" onclick="summaryDetailOpen('${x.id}')"><div><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')} • ${x.waiter||'—'} • ${x.pay||'—'}</div></div></button><div style="text-align:right;min-width:110px"><b>${R(x.total)}</b><br><button type="button" class="btn red" style="margin-top:6px;padding:7px 9px;font-size:12px" onclick="event.stopPropagation();deleteClosedOrder('${x.id}')">EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhuma comanda fechada no período.</div>'}function summaryDetailOpen(id){let x=db.hist.find(v=>String(v.id)===String(id));if(!x)return;let rows=(x.items||[]).map(i=>`<div class="item"><div><b>${i.name}</b><div class="muted">${i.qty} x ${R(i.price)}</div></div><b>${R(Number(i.price)*Number(i.qty))}</b></div>`).join('')||'<div class="empty">Nenhum item registrado.</div>';document.getElementById('summaryDetail').innerHTML=`<div class="card" style="margin-top:12px"><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')}</div><div class="muted">Garçom: ${x.waiter||'—'} • Pagamento: ${x.pay||'—'}</div></div><div class="card">${rows}<div style="display:flex;justify-content:space-between;margin-top:12px"><span class="total">TOTAL</span><span class="total">${R(x.total)}</span></div></div>`;document.getElementById('summaryDetailModal').classList.add('show')}function summaryDetailClose(){document.getElementById('summaryDetailModal').classList.remove('show')}
+function clearHistoryFilters(){document.getElementById('hq').value='';document.getElementById('hd').value=localDateKey(new Date());historyView()}
+function summary(){let start=document.getElementById('sdStart')?.value||'',end=document.getElementById('sdEnd')?.value||'';if(start&&end&&start>end){const t=start;start=end;end=t;document.getElementById('sdStart').value=start;document.getElementById('sdEnd').value=end;}let h=db.hist.filter(x=>{const d=localDateKey(x.date);return(!start||d>=start)&&(!end||d<=end)}),s=h.reduce((a,x)=>a+x.total,0),n=h.length,it=h.reduce((a,x)=>a+x.items.reduce((b,i)=>b+i.qty,0),0);document.getElementById('sales').textContent=R(s);document.getElementById('orders').textContent=n;document.getElementById('avg').textContent=R(n?s/n:0);document.getElementById('items').textContent=it;let p={};h.forEach(x=>p[x.pay]=(p[x.pay]||0)+x.total);document.getElementById('payments').innerHTML=Object.entries(p).map(([k,v])=>`<div class="item"><span>${k}</span><b>${R(v)}</b></div>`).join('')||'<div class="empty">Nenhuma venda no período.</div>';document.getElementById('summaryOrders').innerHTML=h.length?h.map(x=>`<div class="item" style="width:100%;display:flex;gap:8px;align-items:center"><button type="button" style="flex:1;border:0;background:#fff;text-align:left;cursor:pointer;padding:0" onclick="summaryDetailOpen('${x.id}')"><div><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')} • ${x.waiter||'—'} • ${x.pay||'—'}</div></div></button><div style="text-align:right;min-width:110px"><b>${R(x.total)}</b><br><button type="button" class="btn red" style="margin-top:6px;padding:7px 9px;font-size:12px" onclick="event.stopPropagation();deleteClosedOrder('${x.id}')">EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhuma comanda fechada no período.</div>'}function summaryDetailOpen(id){let x=db.hist.find(v=>String(v.id)===String(id));if(!x)return;let rows=(x.items||[]).map(i=>`<div class="item"><div><b>${i.name}</b><div class="muted">${i.qty} x ${R(i.price)}</div></div><b>${R(Number(i.price)*Number(i.qty))}</b></div>`).join('')||'<div class="empty">Nenhum item registrado.</div>';document.getElementById('summaryDetail').innerHTML=`<div class="card" style="margin-top:12px"><b>${x.name||'Cliente'}</b><div class="muted">${new Date(x.date).toLocaleString('pt-BR')}</div><div class="muted">Garçom: ${x.waiter||'—'} • Pagamento: ${x.pay||'—'}</div></div><div class="card">${rows}<div style="display:flex;justify-content:space-between;margin-top:12px"><span class="total">TOTAL</span><span class="total">${R(x.total)}</span></div></div>`;document.getElementById('summaryDetailModal').classList.add('show')}function summaryDetailClose(){document.getElementById('summaryDetailModal').classList.remove('show')}
 async function deleteClosedOrder(id){
   const x=db.hist.find(v=>String(v.id)===String(id));
   if(!x)return alert('Fechamento não encontrado.');
@@ -676,7 +776,7 @@ async function deleteClosedOrder(id){
     alert('Erro ao excluir o fechamento: '+(err?.message||err));
   }
 }
-function clearSummaryDate(){document.getElementById('sd').value='';summary()}
+function clearSummaryDate(){document.getElementById('sdStart').value='';document.getElementById('sdEnd').value='';summary()}
 
 
 
@@ -1212,6 +1312,193 @@ async function loadProducts(silent=false){
   renderProducts();renderAdminProducts();
 }
 
+async function renderInventory(){
+  if(currentRole!=='admin')return alert('Acesso permitido somente ao administrador.');
+  const list=document.getElementById('inventoryList');
+  const status=document.getElementById('estoqueStatus');
+  if(!list)return;
+  list.innerHTML='<div class="empty">Carregando controle de estoque...</div>';
+
+  const [{data:products,error:productsError},{data:rows,error:rowsError}]=await Promise.all([
+    sb.from('products').select('id,name,category,price,active').order('category').order('name'),
+    sb.from('inventory_control').select('product_id,initial_stock,purchase_price,updated_at')
+  ]);
+
+  if(productsError||rowsError){
+    console.error(productsError||rowsError);
+    list.innerHTML='<div class="empty">Não foi possível carregar o controle de estoque.</div>';
+    if(status)status.textContent='Erro ao carregar.';
+    return;
+  }
+
+  const byProduct=new Map((rows||[]).map(x=>[String(x.product_id),x]));
+  const missing=(products||[])
+    .filter(p=>!byProduct.has(String(p.id)))
+    .map(p=>({product_id:p.id,initial_stock:0,purchase_price:0}));
+
+  if(missing.length){
+    const ins=await sb.from('inventory_control').upsert(missing,{onConflict:'product_id'});
+    if(ins.error){
+      console.error(ins.error);
+      list.innerHTML='<div class="empty">Não foi possível preparar o estoque dos produtos.</div>';
+      if(status)status.textContent='Erro ao preparar o estoque.';
+      return;
+    }
+    missing.forEach(x=>byProduct.set(String(x.product_id),x));
+  }
+
+  inventoryProducts=products||[];
+
+  const soldById=new Map();
+  const soldByName=new Map();
+  for(const sale of (db.hist||[])){
+    for(const item of (sale.items||[])){
+      const qty=Number(item?.qty||0);
+      if(!Number.isFinite(qty)||qty<=0)continue;
+      const itemId=item?.id?String(item.id):'';
+      const itemName=String(item?.name||'').trim().toLowerCase();
+      if(itemId)soldById.set(itemId,(soldById.get(itemId)||0)+qty);
+      if(itemName)soldByName.set(itemName,(soldByName.get(itemName)||0)+qty);
+    }
+  }
+
+  const q=(document.getElementById('estoqueBusca')?.value||'').trim().toLowerCase();
+  const filtered=inventoryProducts.filter(p=>p.name.toLowerCase().includes(q));
+
+  const rowsHtml=filtered.map(p=>{
+    const row=byProduct.get(String(p.id))||{initial_stock:0,purchase_price:0};
+    const initial=Math.trunc(Number(row.initial_stock||0));
+    const purchase=Number(row.purchase_price||0);
+    const sold=Number(
+      soldById.get(String(p.id)) ??
+      soldByName.get(String(p.name||'').trim().toLowerCase()) ??
+      0
+    );
+    const finalStock=Math.trunc(initial-sold);
+    const finalClass=finalStock<0?'negative':finalStock===0?'zero':'positive';
+
+    return `<div class="stockRow">
+      <div class="stockProduct">
+        <b title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</b>
+        <div class="muted">${escapeHtml(p.category||'')} ${p.active===false?'• INATIVO':''}</div>
+      </div>
+
+      <div class="stockPricePair">
+        <label class="stockField">
+          <span>Último preço de compra</span>
+          <input id="purchase_${p.id}" type="number" min="0" step="0.01"
+            value="${purchase.toFixed(2)}" inputmode="decimal"
+            aria-label="Último preço de compra de ${escapeHtml(p.name)}">
+        </label>
+        <label class="stockField">
+          <span>Preço de venda</span>
+          <input class="stockSaleInput" type="text" readonly
+            value="R$ ${Number(p.price||0).toFixed(2).replace('.',',')}"
+            aria-label="Preço de venda de ${escapeHtml(p.name)}">
+        </label>
+      </div>
+
+      <label class="stockField">
+        <span>Estoque inicial</span>
+        <input id="stock_${p.id}" type="number" min="0" step="1"
+          value="${Math.trunc(initial)}" inputmode="numeric" pattern="[0-9]*"
+          aria-label="Estoque inicial inteiro de ${escapeHtml(p.name)}">
+      </label>
+
+      <div class="stockMetric">
+        <span class="stockMobileLabel">Vendido</span>
+        <b>${sold}</b>
+      </div>
+
+      <div class="stockMetric ${finalClass}">
+        <span class="stockMobileLabel">Estoque final</span>
+        <b>${finalStock}</b>
+      </div>
+
+      <button type="button" class="btn accent" onclick="saveInventoryRow('${p.id}')">SALVAR PRODUTO</button>
+    </div>`;
+  }).join('');
+
+  list.innerHTML=filtered.length?rowsHtml:'<div class="empty">Nenhum produto encontrado.</div>';
+  if(status)status.textContent=`${filtered.length} produto(s) exibido(s). Vendido = comandas fechadas.`;
+}
+
+function escapeHtml(value){
+  return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function getInventorySold(productId,productName){
+  let total=0;
+  const id=String(productId||'');
+  const name=String(productName||'').trim().toLowerCase();
+  for(const sale of (db.hist||[])){
+    for(const item of (sale.items||[])){
+      const itemId=item?.id?String(item.id):'';
+      const itemName=String(item?.name||'').trim().toLowerCase();
+      if((id&&itemId===id)||(!itemId&&name&&itemName===name)||(name&&itemName===name)) total+=Number(item?.qty||0);
+    }
+  }
+  return Number(total||0);
+}
+
+async function saveInventoryRow(productId){
+  if(currentRole!=='admin')return alert('Acesso permitido somente ao administrador.');
+  const stockInput=document.getElementById('stock_'+productId);
+  const purchaseInput=document.getElementById('purchase_'+productId);
+  const rawStock=String(stockInput?.value??'').trim();
+  const stock=Number(rawStock);
+  const purchase=Number(purchaseInput?.value);
+
+  if(rawStock===''||!Number.isInteger(stock)||stock<0)return alert('O estoque inicial deve ser um número inteiro, sem vírgula.');
+  if(!Number.isFinite(purchase)||purchase<0)return alert('Informe um último preço de compra válido.');
+
+  const {error}=await sb.from('inventory_control').upsert({
+    product_id:productId,
+    initial_stock:stock,
+    purchase_price:Number(purchase.toFixed(2)),
+    updated_at:new Date().toISOString()
+  },{onConflict:'product_id'});
+
+  if(error)return alert('Erro ao salvar estoque: '+error.message);
+  const status=document.getElementById('estoqueStatus');
+  if(status)status.textContent='Dados do produto salvos com sucesso. Atualizando...';
+  await renderInventory();
+}
+
+async function saveAllInventory(){
+  if(currentRole!=='admin')return alert('Acesso permitido somente ao administrador.');
+  const payload=[];
+  for(const p of inventoryProducts){
+    const stockInput=document.getElementById('stock_'+p.id);
+    const purchaseInput=document.getElementById('purchase_'+p.id);
+    if(!stockInput||!purchaseInput)continue;
+
+    const rawStock=String(stockInput.value??'').trim();
+    const stock=Number(rawStock);
+    const purchase=Number(purchaseInput.value);
+
+    if(rawStock===''||!Number.isInteger(stock)||stock<0)return alert('O estoque inicial deve ser um número inteiro para o produto: '+p.name);
+    if(!Number.isFinite(purchase)||purchase<0)return alert('Preço de compra inválido para o produto: '+p.name);
+
+    payload.push({
+      product_id:p.id,
+      initial_stock:stock,
+      purchase_price:Number(purchase.toFixed(2)),
+      updated_at:new Date().toISOString()
+    });
+  }
+  if(!payload.length)return alert('Nenhum produto para salvar.');
+
+  const {error}=await sb.from('inventory_control').upsert(payload,{onConflict:'product_id'});
+  if(error)return alert('Erro ao salvar estoque: '+error.message);
+
+  const status=document.getElementById('estoqueStatus');
+  if(status)status.textContent=`Dados salvos para ${payload.length} produto(s). Atualizando...`;
+  await renderInventory();
+  const status2=document.getElementById('estoqueStatus');
+  if(status2)status2.textContent=`Dados salvos para ${payload.length} produto(s).`;
+}
+
 function renderAdminProducts(){if(currentRole!=='admin')return;
   const el=document.getElementById('adminProducts'); if(!el)return;
   let q=(document.getElementById('prodBuscaAdmin')?.value||'').toLowerCase();
@@ -1264,6 +1551,7 @@ async function loadData(){
   db.open=(o.data||[]).map(x=>({id:x.id,name:x.customer_name,waiter:x.waiter,items:x.items||[],total:Number(x.total),date:x.opened_at,order_type:x.order_type||'normal',employee_name:x.employee_name||null,discount_percent:Number(x.discount_percent||0),gross_total:Number(x.gross_total||x.total||0)}));
   db.hist=(h.data||[]).map(x=>({id:x.id,name:x.customer_name,waiter:x.waiter,items:x.items||[],total:Number(x.total),pay:x.payment_method,date:x.paid_at,order_type:x.order_type||'normal',employee_name:x.employee_name||null,discount_percent:Number(x.discount_percent||0),gross_total:Number(x.gross_total||x.total||0)}));
   save();openView();historyView();summary();renderEmployeeOpenList();
+  if(currentRole==='admin' && document.getElementById('estoque')?.classList.contains('on')) renderInventory();
 }
 
 function subscribeRealtime(){
@@ -1315,6 +1603,7 @@ async function createProduct(){if(currentRole!=='admin')return alert('Acesso per
     return;
   }
 
+  await sb.from('inventory_control').upsert([{product_id:data.id,initial_stock:0}],{onConflict:'product_id'});
   nameEl.value='';
   priceEl.value='';
   activeEl.value='true';
